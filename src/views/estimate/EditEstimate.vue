@@ -1,9 +1,5 @@
-<script setup>
-import { ref } from "vue";
-import db from "../../../../db.js";
-
-const DB = db.DB;
-console.log(db.items);
+<script>
+// @ts-check
 </script>
 
 <template>

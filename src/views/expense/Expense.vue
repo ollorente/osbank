@@ -6,10 +6,7 @@
 </template>
 
 <script>
-import DB from "../../../../db.js";
-
-const DATA = DB.DB.expenses;
-const Expense = DB.Expense;
+// @ts-check
 
 export default {
   data() {
@@ -21,11 +18,12 @@ export default {
     this.getExpense();
   },
   methods: {
+    // @ts-ignore
     async getExpense() {
-      const expense = await DATA.filter(e => e.id === this.$route.params.expense);
-console.log(expense[0]);
+      // const expense = await DATA.filter(e => e.id === this.$route.params.expense);
+// console.log(expense[0]);
 
-      this.expense = Expense(expense[0]);
+      // this.expense = Expense(expense[0]);
     },
   },
   watch: {

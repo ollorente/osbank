@@ -1,6 +1,5 @@
-<script setup>
-import { ref } from "vue";
-import DB from "../../../../db.js";
+<script>
+// @ts-check
 </script>
 
 <template>

@@ -6,10 +6,7 @@
 </template>
 
 <script>
-import DB from "../../../../db.js";
-
-const DATA = DB.DB.estimates;
-const Estimate = DB.Estimate;
+// @ts-check
 
 export default {
   data() {
@@ -21,11 +18,12 @@ export default {
     this.getEstimate();
   },
   methods: {
+    // @ts-ignore
     async getEstimate() {
-      const estimate = await DATA.filter(e => e.id === this.$route.params.estimate);
-console.log(estimate[0]);
+      // const estimate = await DATA.filter(e => e.id === this.$route.params.estimate);
+// console.log(estimate[0]);
 
-      this.estimate = Estimate(estimate[0]);
+      // this.estimate = Estimate(estimate[0]);
     },
   },
   watch: {

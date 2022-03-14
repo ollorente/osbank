@@ -40,12 +40,9 @@
 </template>
 
 <script>
+// @ts-check
+// @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
-
-import DB from "../../../../db.js";
-
-const DATA = DB.DB.expenses;
-const Expense = DB.Expense;
 
 export default {
   components: {
@@ -69,11 +66,12 @@ export default {
     this.getExpenses();
   },
   methods: {
+    // @ts-ignore
     async getExpenses() {
-      const expenses = await DATA;
+      // const expenses = await DATA;
 
-      this.count = await DATA.length;
-      this.expenses = DATA.map((e) => Expense(e));
+      // this.count = await DATA.length;
+      // this.expenses = DATA.map((e) => Expense(e));
     },
   },
   watch: {

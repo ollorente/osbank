@@ -1,8 +1,5 @@
 <script>
-import DB from "../../../../db.js";
-
-const DATA = DB.DB.entries;
-const Entry = DB.Entry;
+// @ts-check
 </script>
 
 <template>

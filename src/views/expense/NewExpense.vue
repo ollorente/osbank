@@ -1,8 +1,5 @@
 <script>
-import DB from "../../../../db.js";
-
-const DATA = DB.DB.expenses;
-const Estimate = DB.Expense;
+// @ts-check
 </script>
 
 <template>
