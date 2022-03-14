@@ -92,7 +92,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 200) {
-          console.log(error);
+          console.log(data);
         }
 
         this.entries = data;

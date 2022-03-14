@@ -17,7 +17,7 @@
         <div v-if="count === 0" class="w-full bg-white rounded my-1 p-3">
           No hay Presupuesto
         </div>
-        <pre class="container">{{ $data }}</pre>
+        <pre class="container hidden">{{ $data }}</pre>
       </section>
     </main>
 

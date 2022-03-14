@@ -75,6 +75,7 @@ export default {
     this.getItems();
   },
   methods: {
+    // @ts-ignore
     async getItems() {
       try {
         this.page++;
@@ -89,7 +90,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 200) {
-          console.log(error);
+          console.log(data);
         }
 
         this.items = data;

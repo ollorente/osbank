@@ -80,6 +80,7 @@ export default {
       item: {
         name: "",
         icon: "",
+        updatedAt: "",
       },
       icons: [
         {
@@ -128,8 +129,6 @@ export default {
     // @ts-ignore
     async getItem() {
       try {
-        this.page++;
-
         const { data, status } = await ItemDataService.get(
           this.$route.params.item
         )
@@ -139,7 +138,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 200) {
-          console.log(error);
+          console.log(data);
         }
 
         this.item = await data;
@@ -147,6 +146,7 @@ export default {
         console.log(error);
       }
     },
+    // @ts-ignore
     async updateItem() {
       try {
         if (this.item.name === null) {
@@ -154,6 +154,7 @@ export default {
           return;
         }
 
+        // @ts-ignore
         this.item.updatedAt = new Date();
 
         const { data, status } = await ItemDataService.update(this.$route.params.item, this.item)
@@ -163,7 +164,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 200) {
-          console.log(error);
+          console.log(data);
         }
 
         await this.$router.push({
