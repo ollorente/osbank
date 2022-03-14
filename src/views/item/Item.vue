@@ -32,7 +32,10 @@
             <span class="font-bold">Creado</span>
             <span>{{ item.createdAt }}</span>
           </p>
-          <p class="flex flex-col py-3" v-if="item.createdAt !== item.updatedAt">
+          <p
+            class="flex flex-col py-3"
+            v-if="item.createdAt !== item.updatedAt"
+          >
             <span class="font-bold">Modificado</span>
             <span>{{ item.updatedAt }}</span>
           </p>
@@ -42,7 +45,11 @@
           :to="{ name: 'EditItem', params: { item: $route.params.item } }"
           class="w-full text-gray-900 mb-3"
         >
-          <div class="w-full text-center uppercase border-2 border-gray-900 rounded mb-3 p-2">Editar</div>
+          <div
+            class="w-full text-center uppercase border-2 border-gray-900 rounded mb-3 p-2"
+          >
+            Editar
+          </div>
         </router-link>
 
         <button
@@ -111,8 +118,6 @@ export default {
     // @ts-ignore
     async getItem() {
       try {
-        this.page++;
-
         const { data, status } = await ItemDataService.get(
           this.$route.params.item
         )
@@ -122,7 +127,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 200) {
-          console.log(error);
+          console.log(data);
         }
 
         this.item = await data;
@@ -132,6 +137,7 @@ export default {
         console.log(error);
       }
     },
+    // @ts-ignore
     async remove() {
       if (window.confirm(`Está a punto de borrar un elemento`)) {
         const { status } = await ItemDataService.remove(this.$route.params.item)
@@ -141,7 +147,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 200) {
-          console.log(error);
+          return;
         }
 
         await this.$router.push({ name: "Items" });
