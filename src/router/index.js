@@ -1,101 +1,161 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-const routes = [
-  {
+const BASE_URL_TITLE = "© OsBank"
+
+const routes = [{
     path: "/",
     name: "Home",
-    component: () => import(/**/ "../views/Home.vue")
+    component: () => import( /**/ "../views/Home.vue"),
+    meta: {
+      title: `Home ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/gastos",
     name: "Expenses",
-    component: () => import(/**/ "../views/expense/Expenses.vue")
+    component: () => import( /**/ "../views/expense/Expenses.vue"),
+    meta: {
+      title: `Gastos ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/gastos/nuevo",
     name: "NewExpense",
-    component: () => import(/**/ "../views/expense/NewExpense.vue")
+    component: () => import( /**/ "../views/expense/NewExpense.vue"),
+    meta: {
+      title: `Nuevo gasto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/gastos/:expense",
     name: "Expense",
-    component: () => import(/**/ "../views/expense/Expense.vue")
+    component: () => import( /**/ "../views/expense/Expense.vue"),
+    meta: {
+      title: `Gasto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/gastos/:expense/editar",
     name: "EditExpense",
-    component: () => import(/**/ "../views/expense/EditExpense.vue")
+    component: () => import( /**/ "../views/expense/EditExpense.vue"),
+    meta: {
+      title: `Editar gasto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/ingresos",
     name: "Entries",
-    component: () => import(/**/ "../views/entry/Entries.vue")
+    component: () => import( /**/ "../views/entry/Entries.vue"),
+    meta: {
+      title: `Ingresos ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/ingresos/nuevo",
     name: "NewEntry",
-    component: () => import(/**/ "../views/entry/NewEntry.vue")
+    component: () => import( /**/ "../views/entry/NewEntry.vue"),
+    meta: {
+      title: `Nuevo ingreso ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/ingresos/:entry",
     name: "Entry",
-    component: () => import(/**/ "../views/entry/Entry.vue")
+    component: () => import( /**/ "../views/entry/Entry.vue"),
+    meta: {
+      title: `Ingreso ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/ingresos/:entry/editar",
     name: "EditEntry",
-    component: () => import(/**/ "../views/entry/EditEntry.vue")
+    component: () => import( /**/ "../views/entry/EditEntry.vue"),
+    meta: {
+      title: `Editar ingreso ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/items",
     name: "Items",
-    component: () => import(/**/ "../views/item/Items.vue")
+    component: () => import( /**/ "../views/item/Items.vue"),
+    meta: {
+      title: `Ítems ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/items/nuevo",
     name: "NewItem",
-    component: () => import(/**/ "../views/item/NewItem.vue")
+    component: () => import( /**/ "../views/item/NewItem.vue"),
+    meta: {
+      title: `Nuevo ítem ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/items/:item",
     name: "Item",
-    component: () => import(/**/ "../views/item/Item.vue")
+    component: () => import( /**/ "../views/item/Item.vue"),
+    meta: {
+      title: `Ítem ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/items/:item/editar",
     name: "EditItem",
-    component: () => import(/**/ "../views/item/EditItem.vue")
+    component: () => import( /**/ "../views/item/EditItem.vue"),
+    meta: {
+      title: `Editar ítem ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/presupuesto",
     name: "Estimates",
-    component: () => import(/**/ "../views/estimate/Estimates.vue")
+    component: () => import( /**/ "../views/estimate/Estimates.vue"),
+    meta: {
+      title: `Presupuesto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/presupuesto/nuevo",
     name: "NewEstimate",
-    component: () => import(/**/ "../views/estimate/NewEstimate.vue")
+    component: () => import( /**/ "../views/estimate/NewEstimate.vue"),
+    meta: {
+      title: `Nuevo presupuesto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/presupuesto/:estimate",
     name: "Estimate",
-    component: () => import(/**/ "../views/estimate/Estimate.vue")
+    component: () => import( /**/ "../views/estimate/Estimate.vue"),
+    meta: {
+      title: `Detalle presupuesto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/presupuesto/:estimate/editar",
     name: "EditEstimate",
-    component: () => import(/**/ "../views/estimate/EditEstimate.vue")
+    component: () => import( /**/ "../views/estimate/EditEstimate.vue"),
+    meta: {
+      title: `Editar presupuesto ${BASE_URL_TITLE}`
+    }
   },
   {
     path: "/*",
     name: "NotFound",
-    component: () => import(/**/ "../views/NotFound.vue")
+    component: () => import( /**/ "../views/NotFound.vue"),
+    meta: {
+      title: `Página no encontrada ${BASE_URL_TITLE}`
+    }
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  next();
 });
 
 export default router;
