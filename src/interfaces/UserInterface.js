@@ -1,3 +1,6 @@
+const ID = crypto.randomUUID();
+const DATE = new Date();
+
 const User = (db) => {
   return {
     id: String(db.id ? db.id : ID),

@@ -1,3 +1,5 @@
+const ID = crypto.randomUUID();
+
 const Month = (db) => {
   return {
     id: String(db.id ? db.id : ID),

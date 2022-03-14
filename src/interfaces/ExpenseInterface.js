@@ -1,3 +1,7 @@
+const YEAR = new Date().getFullYear();
+const ID = crypto.randomUUID();
+const DATE = new Date();
+
 const Expense = (db) => {
   return {
     id: String(db.id ? db.id : ID),
