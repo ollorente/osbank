@@ -139,6 +139,22 @@ const routes = [{
     }
   },
   {
+    path: "/login",
+    name: "Login",
+    component: () => import( /**/ "../views/Home.vue"),
+    meta: {
+      title: `Login ${BASE_URL_TITLE}`
+    }
+  },
+  {
+    path: "/registro",
+    name: "Logup",
+    component: () => import( /**/ "../views/Home.vue"),
+    meta: {
+      title: `Registro ${BASE_URL_TITLE}`
+    }
+  },
+  {
     path: "/*",
     name: "NotFound",
     component: () => import( /**/ "../views/NotFound.vue"),
