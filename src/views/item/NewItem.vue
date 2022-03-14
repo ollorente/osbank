@@ -69,9 +69,9 @@
 // @ts-ignore
 import ItemDataService from "@/services/ItemDataService";
 // @ts-ignore
+import ItemInterface from "@/interfaces/ItemInterface.js";
+// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
-
-import DB from "../../../../db.js";
 
 export default {
   components: {
@@ -124,6 +124,7 @@ export default {
     };
   },
   methods: {
+    // @ts-ignore
     async addItem() {
       try {
         if (this.item.name === null) {
@@ -131,8 +132,7 @@ export default {
           return;
         }
 
-        const Item = await DB.Item;
-        const item = await Item(this.item);
+        const item = await ItemInterface(this.item);
 
         const { data, status } = await ItemDataService.create(item)
           .then(async (response) => {
@@ -141,7 +141,7 @@ export default {
           .catch((error) => console.log(error));
 
         if (status !== 201) {
-          console.log(error);
+          console.log(data);
         }
 
         await this.$router.push({ name: "Items" });
