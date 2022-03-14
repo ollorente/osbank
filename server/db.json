@@ -1,19 +1,6 @@
 {
   "entries": [],
-  "estimates": [
-    {
-      "id": "80e74e60-af83-48a7-a357-578232a81b0f",
-      "name": "Probando",
-      "amount": 1000,
-      "itemId": "c276c70f-967d-43ae-9b88-7765ddf40dbc",
-      "monthId": "9f70434f-3955-4158-965d-1bbd042fa47b",
-      "year": 2022,
-      "userId": "",
-      "isActive": true,
-      "createdAt": 1641178476707,
-      "updatedAt": 1641178476707
-    }
-  ],
+  "estimates": [],
   "expenses": [],
   "items": [
     {
