@@ -35,6 +35,17 @@
               </option>
             </select>
           </div>
+          <div class="py-2">
+            <input
+              type="checkbox"
+              id="isActive"
+              class="bg-green-trashteo m-2"
+              v-model="item.isActive"
+            />
+            <label for="isActive" class="">{{
+              item.isActive ? "Activo" : "Inactivo"
+            }}</label>
+          </div>
           <button class="w-full bg-yellow-600 text-white rounded my-1 p-2">
             Editar
           </button>
@@ -157,7 +168,10 @@ export default {
         // @ts-ignore
         this.item.updatedAt = new Date();
 
-        const { data, status } = await ItemDataService.update(this.$route.params.item, this.item)
+        const { data, status } = await ItemDataService.update(
+          this.$route.params.item,
+          this.item
+        )
           .then(async (response) => {
             return await response;
           })

@@ -5,41 +5,41 @@ class EstimateDataService {
   /**
    * @param {any} data
    */
-  create(data) {
-    return http.post(`/estimates`, data);
+  async create(data) {
+    return await http.post(`/estimates`, data);
   }
 
   /**
-   * @param {any} estimate
+   * @param {string} estimate
    */
-  get(estimate) {
-    return http.get(`/estimates/${estimate}`);
+  async get(estimate) {
+    return await http.get(`/estimates/${estimate}`);
   }
 
   /**
    * @param {number} l
    * @param {number} p
    */
-  list(l, p) {
+  async list(l, p) {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return http.get(`/estimates?limit=${limit}&page=${page}`);
+    return await http.get(`/estimates?limit=${limit}&page=${page}`);
   }
 
   /**
-   * @param {any} estimate
+   * @param {string} estimate
    */
-  remove(estimate) {
-    return http.delete(`/estimates/${estimate}`);
+  async remove(estimate) {
+    return await http.delete(`/estimates/${estimate}`);
   }
 
   /**
-   * @param {any} estimate
+   * @param {string} estimate
    * @param {any} data
    */
-  update(estimate, data) {
-    return http.put(`/estimates/${estimate}`, data);
+  async update(estimate, data) {
+    return await http.put(`/estimates/${estimate}`, data);
   }
 }
 

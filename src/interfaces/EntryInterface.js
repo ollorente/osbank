@@ -6,6 +6,7 @@ const Entry = (db) => {
   return {
     id: String(db.id ? db.id : ID),
     amount: Number(db.amount ? db.amount : 0),
+    detail: String(db.detail ? db.detail : ""),
     monthId: String(db.monthId),
     year: Number(db.year ? db.year : YEAR),
     userId: String(db.userId ? db.userId : ""),

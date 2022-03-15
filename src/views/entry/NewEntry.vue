@@ -6,32 +6,61 @@
       <section class="">
         <form @submit.prevent="addEntry">
           <div class="py-2">
-            <label for="name" class="font-semibold ml-3">Nombre *</label>
+            <label for="amount" class="font-semibold ml-3">Monto *</label>
             <input
-              type="text"
+              type="number"
               class="w-full bg-white rounded p-2"
-              id="name"
-              v-model="entry.name"
-              placeholder="Nombre *"
+              id="amount"
+              min="0"
+              v-model="entry.amount"
+              placeholder="Monto *"
               autofocus
               required
             />
           </div>
           <div class="py-2">
-            <label for="icon" class="font-semibold ml-3">Tipo</label>
+            <label for="detail" class="font-semibold ml-3">Detalle</label>
+            <input
+              type="text"
+              class="w-full bg-white rounded p-2"
+              id="detail"
+              v-model="entry.detail"
+              placeholder="Detalle"
+            />
+          </div>
+          <div class="py-2">
+            <label for="monthId" class="font-semibold ml-3">Mes</label>
             <select
-              name="icon"
-              v-model="entry.icon"
-              id="icon"
+              name="monthId"
+              v-model="entry.monthId"
+              id="monthId"
               class="w-full bg-white rounded p-2"
             >
-              <option value="null" selected>-- Seleccione un tipo --</option>
+              <option value="null" selected>-- Seleccione un mes --</option>
               <option
-                v-for="(icon, index) in icons"
+                v-for="(month, index) in months"
                 :key="index"
-                :value="icon.icon"
+                :value="month.id"
               >
-                {{ icon.title }}
+                {{ month.name }}
+              </option>
+            </select>
+          </div>
+          <div class="py-2">
+            <label for="year" class="font-semibold ml-3">Año</label>
+            <select
+              name="year"
+              v-model="entry.year"
+              id="year"
+              class="w-full bg-white rounded p-2"
+            >
+              <option value="null" selected>-- Seleccione un año --</option>
+              <option
+                v-for="year in years"
+                :key="year"
+                :value="year"
+              >
+                {{ year }}
               </option>
             </select>
           </div>
@@ -69,6 +98,8 @@
 // @ts-ignore
 import EntryDataService from "@/services/EntryDataService";
 // @ts-ignore
+import MonthDataService from "@/services/MonthDataService";
+// @ts-ignore
 import EntryInterface from "@/interfaces/EntryInterface.js";
 // @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
@@ -80,9 +111,15 @@ export default {
   data() {
     return {
       entry: {
-        name: null,
-        icon: null,
+        amount: null,
+        detail: null,
+        monthId: null,
+        year: new Date().getFullYear(),
       },
+      months: [],
+      years: [],
+      limit: 20,
+      page: 1,
       icons: [
         {
           icon: "fas fa-lightbulb",
@@ -123,12 +160,41 @@ export default {
       },
     };
   },
+  created() {
+    this.getMonths();
+    this.getYears();
+  },
   methods: {
+    // @ts-ignore
+    async getMonths() {
+      try {
+        const { data } = await MonthDataService.list(this.limit, this.page)
+          .then(async (response) => {
+            return await response;
+          })
+          .catch((error) => console.log(error));
+
+          this.months = await data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getYears() {
+      const currentYear = new Date().getFullYear();
+      
+      let year = []
+      for(let i = currentYear; i <= currentYear + 10; i++) {
+        year.push(i);
+      }
+      
+      this.years = year;
+    },
     // @ts-ignore
     async addEntry() {
       try {
-        if (this.entry.name === null) {
-          alert("Nombre no puede estar vacio.");
+        if (this.entry.amount === null) {
+          alert("Monto no puede estar vacio.");
           return;
         }
 
@@ -149,6 +215,9 @@ export default {
         console.log(error);
       }
     },
+  },
+  watch: {
+    $route: ["getMonths", "getYears"],
   },
 };
 </script>

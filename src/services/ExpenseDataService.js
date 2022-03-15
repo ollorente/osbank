@@ -5,41 +5,41 @@ class ExpenseDataService {
   /**
    * @param {any} data
    */
-  create(data) {
-    return http.post(`/expenses`, data);
+  async create(data) {
+    return await http.post(`/expenses`, data);
   }
 
   /**
-   * @param {any} expense
+   * @param {string} expense
    */
-  get(expense) {
-    return http.get(`/expenses/${expense}`);
+  async get(expense) {
+    return await http.get(`/expenses/${expense}`);
   }
 
   /**
    * @param {number} l
    * @param {number} p
    */
-  list(l, p) {
+  async list(l, p) {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return http.get(`/expenses?limit=${limit}&page=${page}`);
+    return await http.get(`/expenses?limit=${limit}&page=${page}`);
   }
 
   /**
-   * @param {any} expense
+   * @param {string} expense
    */
-  remove(expense) {
-    return http.delete(`/expenses/${expense}`);
+  async remove(expense) {
+    return await http.delete(`/expenses/${expense}`);
   }
 
   /**
-   * @param {any} expense
+   * @param {string} expense
    * @param {any} data
    */
-  update(expense, data) {
-    return http.put(`/expenses/${expense}`, data);
+  async update(expense, data) {
+    return await http.put(`/expenses/${expense}`, data);
   }
 }
 

@@ -5,48 +5,96 @@ class UserDataService {
   /**
    * @param {any} data
    */
-  auth(data) {
-    return http.post(`/users/auth`, data);
+  async auth(data) {
+    return await http.post(`/users/auth`, data);
   }
 
   /**
    * @param {any} data
    */
-  create(data) {
-    return http.post(`/users`, data);
+  async create(data) {
+    return await http.post(`/users`, data);
   }
 
   /**
-   * @param {any} user
+   * @param {String} user
    */
-  get(user) {
-    return http.get(`/users/${user}`);
+  async get(user) {
+    return await http.get(`/users/${user}`);
   }
 
   /**
    * @param {number} l
    * @param {number} p
    */
-  list(l, p) {
+  async list(l, p) {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return http.get(`/users?limit=${limit}&page=${page}`);
+    return await http.get(`/users?limit=${limit}&page=${page}`);
   }
 
   /**
-   * @param {any} user
+   * @param {String} user
    */
-  remove(user) {
-    return http.delete(`/users/${user}`);
+  async remove(user) {
+    return await http.delete(`/users/${user}`);
   }
 
   /**
-   * @param {any} user
+   * @param {String} user
    * @param {any} data
    */
-  update(user, data) {
-    return http.put(`/users/${user}`, data);
+  async update(user, data) {
+    return await http.put(`/users/${user}`, data);
+  }
+
+  /**
+   * @param {String} user
+   * @param {number} l
+   * @param {number} p
+   */
+  async entries(user, l, p) {
+    const limit = l ?? 10;
+    const page = p ?? 1;
+
+    return await http.get(`/users/${user}/entries?limit=${limit}&page=${page}`);
+  }
+
+  /**
+   * @param {String} user
+   * @param {number} l
+   * @param {number} p
+   */
+  async estimates(user, l, p) {
+    const limit = l ?? 10;
+    const page = p ?? 1;
+
+    return await http.get(`/users/${user}/estimates?limit=${limit}&page=${page}`);
+  }
+
+  /**
+   * @param {String} user
+   * @param {number} l
+   * @param {number} p
+   */
+  async expenses(user, l, p) {
+    const limit = l ?? 10;
+    const page = p ?? 1;
+
+    return await http.get(`/users/${user}/expenses?limit=${limit}&page=${page}`);
+  }
+
+  /**
+   * @param {String} user
+   * @param {number} l
+   * @param {number} p
+   */
+  async items(user, l, p) {
+    const limit = l ?? 10;
+    const page = p ?? 1;
+
+    return await http.get(`/users/${user}/items?limit=${limit}&page=${page}`);
   }
 }
 

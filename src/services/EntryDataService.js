@@ -5,41 +5,41 @@ class EntryDataService {
   /**
    * @param {any} data
    */
-  create(data) {
-    return http.post(`/entries`, data);
+  async create(data) {
+    return await http.post(`/entries`, data);
   }
 
   /**
-   * @param {any} entry
+   * @param {string} entry
    */
-  get(entry) {
-    return http.get(`/entries/${entry}`);
+  async get(entry) {
+    return await http.get(`/entries/${entry}`);
   }
 
   /**
    * @param {number} l
    * @param {number} p
    */
-  list(l, p) {
+  async list(l, p) {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return http.get(`/entries?isActive=true&_limit=${limit}&_page=${page}&_sort=createdAt&_order=desc&_expand=month`);
+    return await http.get(`/entries?isActive=true&_limit=${limit}&_page=${page}&_sort=createdAt&_order=desc&_expand=month`);
   }
 
   /**
-   * @param {any} entry
+   * @param {string} entry
    */
-  remove(entry) {
-    return http.delete(`/entries/${entry}`);
+  async remove(entry) {
+    return await http.delete(`/entries/${entry}`);
   }
 
   /**
-   * @param {any} entry
+   * @param {string} entry
    * @param {any} data
    */
-  update(entry, data) {
-    return http.put(`/entries/${entry}`, data);
+  async update(entry, data) {
+    return await http.put(`/entries/${entry}`, data);
   }
 }
 

@@ -30,14 +30,14 @@
           </p>
           <p class="flex flex-col py-3">
             <span class="font-bold">Creado</span>
-            <span>{{ item.createdAt }}</span>
+            <span>{{ new Date(item.createdAt).toDateString() }}</span>
           </p>
           <p
             class="flex flex-col py-3"
             v-if="item.createdAt !== item.updatedAt"
           >
             <span class="font-bold">Modificado</span>
-            <span>{{ item.updatedAt }}</span>
+            <span>{{ new Date(item.updatedAt).toDateString() }}</span>
           </p>
         </div>
 
@@ -64,7 +64,7 @@
     </main>
 
     <footer
-      class="sticky bottom-0 w-full bg-yellow-400 border-t border-yellow-500 p-3 flex justify-between align-center"
+      class="sticky bottom-0 w-full bg-yellow-400 border-t-2 border-yellow-500 p-3 flex justify-between align-center"
     >
       <router-link
         v-for="(link, index) in footLinks"
