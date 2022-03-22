@@ -29,7 +29,10 @@ module.exports = async (req, res, next) => {
       count,
       data: count > 0 ? result.map(e => UserRefInterface(e)) : []
     })
-  } catch (error) {
-    next(error)
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: err.message,
+    })
   }
 }
