@@ -21,7 +21,7 @@ class MonthDataService {
    * @param {number} p
    */
   async list(l, p) {
-    const limit = l ?? 10;
+    const limit = l ?? 12;
     const page = p ?? 1;
 
     return await http.get(`/months?isActive=true&_limit=${limit}&_page=${page}&_sort=order&_order=asc`);

@@ -20,7 +20,7 @@ class UserDataService {
    * @param {String} user
    */
   async get(user) {
-    return await http.get(`/users/${user}`);
+    return await http.get(`/users`);
   }
 
   /**
@@ -31,22 +31,18 @@ class UserDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/users?limit=${limit}&page=${page}`);
+    return await http.get(`/users/all?limit=${limit}&page=${page}`);
+  }
+
+  async remove() {
+    return await http.delete(`/users`);
   }
 
   /**
-   * @param {String} user
-   */
-  async remove(user) {
-    return await http.delete(`/users/${user}`);
-  }
-
-  /**
-   * @param {String} user
    * @param {any} data
    */
-  async update(user, data) {
-    return await http.put(`/users/${user}`, data);
+  async update(data) {
+    return await http.put(`/users`, data);
   }
 
   /**

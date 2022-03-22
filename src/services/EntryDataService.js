@@ -13,7 +13,7 @@ class EntryDataService {
    * @param {string} entry
    */
   async get(entry) {
-    return await http.get(`/entries/${entry}`);
+    return await http.get(`/entries/${entry}?_expand=month`);
   }
 
   /**
@@ -39,7 +39,7 @@ class EntryDataService {
    * @param {any} data
    */
   async update(entry, data) {
-    return await http.put(`/entries/${entry}`, data);
+    return await http.patch(`/entries/${entry}`, data);
   }
 }
 

@@ -155,6 +155,38 @@ const routes = [{
     }
   },
   {
+    path: "/usuarios",
+    name: "Users",
+    component: () => import( /**/ "../views/user/Users.vue"),
+    meta: {
+      title: `Usuarios ${BASE_URL_TITLE}`
+    }
+  },
+  {
+    path: "/usuarios/nuevo",
+    name: "NewUser",
+    component: () => import( /**/ "../views/user/NewUser.vue"),
+    meta: {
+      title: `Nuevo usuario ${BASE_URL_TITLE}`
+    }
+  },
+  {
+    path: "/usuarios/:user",
+    name: "User",
+    component: () => import( /**/ "../views/user/Users.vue"),
+    meta: {
+      title: `Detalle usuario ${BASE_URL_TITLE}`
+    }
+  },
+  {
+    path: "/usuarios/:user/editar",
+    name: "EditUser",
+    component: () => import( /**/ "../views/user/EditUser.vue"),
+    meta: {
+      title: `Editar usuario ${BASE_URL_TITLE}`
+    }
+  },
+  {
     path: "/*",
     name: "NotFound",
     component: () => import( /**/ "../views/NotFound.vue"),

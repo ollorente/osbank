@@ -5,10 +5,26 @@
     <main class="container mx-auto p-3">
       <div class="w-72 h-72 bg-white text-gray-900 text-center rounded-full mx-auto p-3 flex">
         <div class="m-auto">
-          <div class="text-4xl font-bold">COP $4'578.000</div>
+          <div class="text-4xl font-bold">COP ${{ total.total }}</div>
           <div class="text-xl">Saldo</div>
         </div>
       </div>
+      
+      <div class="w-36 h-36 bg-white text-gray-900 text-center rounded-full mx-auto p-3 flex">
+        <div class="m-auto">
+          <div class="text-2xl font-bold">COP ${{ total.estimate }}</div>
+          <div class="text-xl">Presupuesto</div>
+        </div>
+      </div>
+      
+      <div class="w-36 h-36 bg-white text-gray-900 text-center rounded-full mx-auto p-3 flex">
+        <div class="m-auto">
+          <div class="text-2xl font-bold">COP ${{ total.expense }}</div>
+          <div class="text-xl">Saldo</div>
+        </div>
+      </div>
+
+      <pre class="container">{{ $Gastos }}</pre>
     </main>
 
     <footer
@@ -32,6 +48,10 @@
 </template>
 
 <script>
+// @ts-check
+// @ts-ignore
+import TotalDataService from "@/services/TotalDataService";
+// @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
 
 export default {
@@ -41,6 +61,7 @@ export default {
   },
   data() {
     return {
+      total: {},
       footLinks: [
         {
           component: "NewItem",
@@ -62,6 +83,33 @@ export default {
         },
       ],
     };
+  },
+  created() {
+    this.getTotal();
+  },
+  methods: {
+    // @ts-ignore
+    async getTotal() {
+      try {
+        const { data, status } = await TotalDataService.get()
+          .then(async (response) => {
+            console.log(response);
+            return await response;
+          })
+          .catch((error) => console.log(error));
+
+        if (status !== 200) {
+          console.log(data);
+        }
+
+        this.total = data.data[0];
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    $route: ["getTotal"],
   },
 };
 </script>

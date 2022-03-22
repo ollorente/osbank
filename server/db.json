@@ -1,70 +1,15 @@
 {
   "entries": [
     {
-      "id": "3fd31289-7e2c-4ef3-b7c0-f7bb15952941",
-      "amount": 457897,
-      "detail": "Pago de nómina",
-      "monthId": "f801d489-d297-4da2-8888-578dbaaec9a0",
-      "year": 2022,
-      "userId": "",
-      "isActive": true,
-      "createdAt": "2022-02-15T05:34:38.506Z",
-      "updatedAt": "2022-02-15T05:34:38.506Z"
-    },
-    {
-      "id": "8dc96918-ab06-485c-9279-bb521dc1c151",
-      "amount": 2289485,
-      "detail": "Pago de nómina",
-      "monthId": "2ce48020-8c80-40f6-90a4-6ab8d114b5c2",
-      "year": 2022,
-      "userId": "",
-      "isActive": true,
-      "createdAt": "2022-03-15T05:43:28.911Z",
-      "updatedAt": "2022-03-15T05:43:28.911Z"
-    },
-    {
-      "id": "43a518c1-e84b-4cae-a493-a8f56cbe5bde",
-      "amount": 2289485,
-      "detail": "Pago de nómina",
-      "monthId": "94911b83-0ebd-4afb-9695-3d5cd3e000a3",
-      "year": 2022,
-      "userId": "",
-      "isActive": true,
-      "createdAt": "2022-03-15T05:50:07.125Z",
-      "updatedAt": "2022-03-15T05:50:07.125Z"
-    },
-    {
-      "id": "bd743d85-38d2-4ab7-8430-38d409bb9d35",
-      "amount": 2289485,
-      "detail": "Pago de nómina",
+      "id": "f05ed139-a513-4525-8f31-1be826cdd1e5",
+      "amount": 7894568,
+      "detail": "fyuñhjlijs",
       "monthId": "43e6a8bb-64e5-432a-9460-48cf7d7d676d",
-      "year": 2022,
+      "year": 2023,
       "userId": "",
       "isActive": true,
-      "createdAt": "2022-03-15T05:58:28.900Z",
-      "updatedAt": "2022-03-15T05:58:28.900Z"
-    },
-    {
-      "id": "123fb804-3bdb-423e-b293-d42927cafb22",
-      "amount": 2289485,
-      "detail": "Pago de nómina",
-      "monthId": "c1eceade-312d-4de1-ae87-307fe35846cb",
-      "year": 2022,
-      "userId": "",
-      "isActive": true,
-      "createdAt": "2022-03-15T05:59:17.882Z",
-      "updatedAt": "2022-03-15T05:59:17.882Z"
-    },
-    {
-      "id": "666ff8ef-5d56-44cd-a4d1-eb6d28256d9e",
-      "amount": 2289485,
-      "detail": "Pago de nómina",
-      "monthId": "9f70434f-3955-4158-965d-1bbd042fa47b",
-      "year": 2022,
-      "userId": "",
-      "isActive": true,
-      "createdAt": "2022-03-15T05:59:40.892Z",
-      "updatedAt": "2022-03-15T05:59:40.892Z"
+      "createdAt": "2022-03-17T01:51:49.320Z",
+      "updatedAt": "2022-03-17T02:15:10.309Z"
     }
   ],
   "estimates": [],
@@ -276,5 +221,29 @@
       "isActive": true
     }
   ],
-  "users": []
+  "totals": [
+    {
+      "id": "ec2359cc-2833-4ba0-aa9e-01e5f985d7cd",
+      "total": 7894568,
+      "estimate": 0,
+      "expense": 0,
+      "userId": "0ee85832-704a-4499-b4bb-8deddd4af080"
+    }
+  ],
+  "users": [
+    {
+      "id": "0ee85832-704a-4499-b4bb-8deddd4af080",
+      "phone": "1234567890",
+      "name": "Test",
+      "email": "test@test.com",
+      "password": "789456123",
+      "total": 7894568,
+      "estimate": 0,
+      "expense": 0,
+      "isActive": true,
+      "isLock": false,
+      "createdAt": "2022-03-21 00:54:19",
+      "updatedAt": "2022-03-21 00:54:19"
+    }
+  ]
 }

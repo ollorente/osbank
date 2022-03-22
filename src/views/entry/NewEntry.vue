@@ -120,32 +120,6 @@ export default {
       years: [],
       limit: 20,
       page: 1,
-      icons: [
-        {
-          icon: "fas fa-lightbulb",
-          title: "Energía",
-        },
-        {
-          icon: "fas fa-burn",
-          title: "Gas",
-        },
-        {
-          icon: "fas fa-broadcast-tower",
-          title: "Internet",
-        },
-        {
-          icon: "fas fa-money-bill-wave",
-          title: "Pago",
-        },
-        {
-          icon: "fas fa-medkit",
-          title: "Salud",
-        },
-        {
-          icon: "fas fa-phone",
-          title: "Teléfono",
-        },
-      ],
       footLinks: [
         {
           component: "Entries",
@@ -181,10 +155,10 @@ export default {
     },
     // @ts-ignore
     async getYears() {
-      const currentYear = new Date().getFullYear();
+      const currentYear = new Date().getFullYear() - 2;
       
       let year = []
-      for(let i = currentYear; i <= currentYear + 10; i++) {
+      for(let i = currentYear; i <= currentYear + 9; i++) {
         year.push(i);
       }
       
