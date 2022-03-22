@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
     const emailExist = await UserModel.findOne({
       email: req.body.email
     })
+
     if (emailExist) {
       return res.status(400).json({
         error: `Email already exist!`
@@ -23,6 +24,7 @@ module.exports = async (req, res, next) => {
     const phoneExist = await UserModel.findOne({
       phone: req.body.phone
     })
+
     if (phoneExist) {
       return res.status(400).json({
         error: `Phone already exist!`
@@ -42,7 +44,10 @@ module.exports = async (req, res, next) => {
       error: false,
       data: UserRefInterface(result)
     })
-  } catch (error) {
-    next(error)
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: err.message,
+    })
   }
 }
