@@ -141,7 +141,7 @@ const routes = [{
   {
     path: "/login",
     name: "Login",
-    component: () => import( /**/ "../views/Home.vue"),
+    component: () => import( /**/ "../views/auth/Login.vue"),
     meta: {
       title: `Login ${BASE_URL_TITLE}`
     }
@@ -149,7 +149,7 @@ const routes = [{
   {
     path: "/registro",
     name: "Logup",
-    component: () => import( /**/ "../views/Home.vue"),
+    component: () => import( /**/ "../views/auth/Logup.vue"),
     meta: {
       title: `Registro ${BASE_URL_TITLE}`
     }
