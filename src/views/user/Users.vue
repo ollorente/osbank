@@ -4,24 +4,24 @@
 
     <main class="container mx-auto p-3">
       <section class="">
-        <router-link
-          v-for="(user, index) in users"
+        <ol v-for="(user, index) in users"
           :key="index"
-          :to="{ name: 'User', params: { user: user.id } }"
         >
-          <div class="w-full bg-white rounded my-1 p-3" :class="user.isActive ? 'opacity-100' : 'opacity-30'">
-            <i
-              class="w-8 text-2xl text-center mx-2"
-              :class="user.icon ? user.icon : 'fas fa-suserap'"
-            ></i>
-            <img :src="user.image" :alt="user.name" class="w-8 h-8 rounded-full mx-2">
-            <span class="text-l">{{ user.name }}</span> <br />
-          </div>
-        </router-link>
+          <router-link
+            :to="{ name: 'User', params: { user: user.id } }"
+          >
+            <div class="w-full bg-white rounded my-1 p-3 flex" :class="user.isActive ? 'opacity-100' : 'opacity-30'">
+            <div class="text-l font-bold mr-3">{{ ++index }}.</div> 
+            <div>
+              <span class="text-l font-bold">{{ user.name }}</span> <br />
+              <span class="text-l">{{ user.createdAt.split('T')[0] }}</span>
+            </div>
+            </div>
+          </router-link>
+        </ol>
         <div v-if="count === 0" class="w-full bg-white rounded my-1 p-3">
-          No hay Ítems
+          No hay Usuarios
         </div>
-        <pre class="container hidden">{{ $data }}</pre>
       </section>
     </main>
 
@@ -48,7 +48,7 @@
 <script>
 // @ts-check
 // @ts-ignore
-import UserDataService from "@/services/UserDataService";
+import UserDataService from "@/services/UserDataService.js";
 // @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
 
@@ -81,22 +81,21 @@ export default {
       try {
         this.page++;
 
-        const { data, status } = await UserDataService.list(
+        const { error, count, data } = await UserDataService.list(
           this.limit,
           this.page
         )
           .then(async (response) => {
-            console.log(response);
-            return await response;
+            return await response.data;
           })
           .catch((error) => console.log(error));
 
-        if (status !== 200) {
-          console.log(data);
+        if (error) {
+          console.log(error.message);
         }
 
-        this.users = data.data;
-        this.count = data.total;
+        this.users = data;
+        this.count = count;
       } catch (error) {
         console.log(error);
       }
