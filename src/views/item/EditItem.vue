@@ -78,7 +78,7 @@
 <script>
 // @ts-check
 // @ts-ignore
-import ItemDataService from "@/services/ItemDataService";
+import ItemDataService from "@/services/ItemDataService.js";
 // @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
 

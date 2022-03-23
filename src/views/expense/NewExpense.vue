@@ -67,7 +67,7 @@
 <script>
 // @ts-check
 // @ts-ignore
-import ExpenseDataService from "@/services/ExpenseDataService";
+import ExpenseDataService from "@/services/ExpenseDataService.js";
 // @ts-ignore
 import ExpenseInterface from "@/interfaces/ExpenseInterface.js";
 // @ts-ignore

@@ -49,7 +49,7 @@
 <script>
 // @ts-check
 // @ts-ignore
-import EntryDataService from "@/services/EntryDataService";
+import EntryDataService from "@/services/EntryDataService.js";
 // @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
 
