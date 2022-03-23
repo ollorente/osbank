@@ -24,7 +24,9 @@ class EstimateDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/estimates?isActive=true&_limit=${limit}&_page=${page}&_sort=year&_sort=monthId&_order=asc`);
+    return await http.get(
+      `/estimates?isActive=true&limit=${limit}&page=${page}&sort=year&sort=monthId&order=asc`
+    );
   }
 
   /**

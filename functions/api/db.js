@@ -1,14 +1,12 @@
 // @ts-nocheck
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 mongoose
-  .connect(process.env.MONGODB || 'mongodb://localhost:27017/osBankDev',
-    {
-      useUnifiedTopology: true,
-      useNewUrlParser: true
-    }
-  )
+  .connect(process.env.MONGODB || "mongodb://localhost:27017/osBankDev", {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
   .then(() => console.log(`>>> [DB] is connected... <<<`))
-  .catch((error) => console.log(`<<< [ERROR]: ${error} >>>`))
+  .catch((error) => console.log(`<<< [ERROR]: ${error} >>>`));
 
-module.exports = mongoose
+module.exports = mongoose;

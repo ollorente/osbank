@@ -21,8 +21,7 @@ export default {
     // @ts-ignore
     async getExpense() {
       // const expense = await DATA.filter(e => e.id === this.$route.params.expense);
-// console.log(expense[0]);
-
+      // console.log(expense[0]);
       // this.expense = Expense(expense[0]);
     },
   },

@@ -24,7 +24,9 @@ class ItemDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/items?isActive=true&_limit=${limit}&_page=${page}&_sort=name&_order=asc`);
+    return await http.get(
+      `/items?limit=${limit}&page=${page}&sort=name&order=asc`
+    );
   }
 
   /**
@@ -51,7 +53,9 @@ class ItemDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/items/${item}/estimates?isActive=true&_limit=${limit}&_page=${page}&_sort=name&_order=asc`);
+    return await http.get(
+      `/items/${item}/estimates?limit=${limit}&page=${page}&sort=name&order=asc`
+    );
   }
 
   /**
@@ -63,7 +67,9 @@ class ItemDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/items/${item}/expenses?isActive=true&_limit=${limit}&_page=${page}&_sort=name&_order=asc`);
+    return await http.get(
+      `/items/${item}/expenses?isActive=true&_limit=${limit}&_page=${page}&_sort=name&_order=asc`
+    );
   }
 }
 

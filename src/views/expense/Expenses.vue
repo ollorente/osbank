@@ -21,7 +21,9 @@
       </section>
     </main>
 
-    <footer class="sticky bottom-0 w-full bg-yellow-400 border-t border-yellow-500 p-3 flex justify-between align-center">
+    <footer
+      class="sticky bottom-0 w-full bg-yellow-400 border-t border-yellow-500 p-3 flex justify-between align-center"
+    >
       <router-link
         v-for="(link, index) in footLinks"
         :key="index"
@@ -69,7 +71,6 @@ export default {
     // @ts-ignore
     async getExpenses() {
       // const expenses = await DATA;
-
       // this.count = await DATA.length;
       // this.expenses = DATA.map((e) => Expense(e));
     },

@@ -9,7 +9,10 @@
           :key="index"
           :to="{ name: 'Item', params: { item: item.id } }"
         >
-          <div class="w-full bg-white rounded my-1 p-3" :class="item.isActive ? 'opacity-100' : 'opacity-30'">
+          <div
+            class="w-full bg-white rounded my-1 p-3"
+            :class="item.isActive ? 'opacity-100' : 'opacity-30'"
+          >
             <i
               class="w-8 text-2xl text-center mx-2"
               :class="item.icon ? item.icon : 'fas fa-sitemap'"

@@ -5,5 +5,5 @@ module.exports = (db) => {
     name: String(db.name ? db.name : ""),
     isActive: Boolean(db.isActive ? db.isActive : true),
     createdAt: db.createdAt,
-  }
-}
+  };
+};

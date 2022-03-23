@@ -24,7 +24,9 @@ class EntryDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/entries?isActive=true&_limit=${limit}&_page=${page}&_sort=createdAt&_order=desc&_expand=month`);
+    return await http.get(
+      `/entries?isActive=true&limit=${limit}&page=${page}&sort=createdAt&order=desc&_expand=month`
+    );
   }
 
   /**

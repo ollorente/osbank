@@ -12,5 +12,5 @@ module.exports = (db) => {
     isLock: Boolean(db.isLock ? db.isLock : false),
     createdAt: db.createdAt,
     updatedAt: db.updatedAt,
-  }
-}
+  };
+};

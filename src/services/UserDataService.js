@@ -66,7 +66,9 @@ class UserDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/users/${user}/estimates?limit=${limit}&page=${page}`);
+    return await http.get(
+      `/users/${user}/estimates?limit=${limit}&page=${page}`
+    );
   }
 
   /**
@@ -78,7 +80,9 @@ class UserDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/users/${user}/expenses?limit=${limit}&page=${page}`);
+    return await http.get(
+      `/users/${user}/expenses?limit=${limit}&page=${page}`
+    );
   }
 
   /**

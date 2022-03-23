@@ -55,11 +55,7 @@
               class="w-full bg-white rounded p-2"
             >
               <option value="null" selected>-- Seleccione un año --</option>
-              <option
-                v-for="year in years"
-                :key="year"
-                :value="year"
-              >
+              <option v-for="year in years" :key="year" :value="year">
                 {{ year }}
               </option>
             </select>
@@ -148,7 +144,7 @@ export default {
           })
           .catch((error) => console.log(error));
 
-          this.months = await data;
+        this.months = await data;
       } catch (error) {
         console.log(error);
       }
@@ -156,12 +152,12 @@ export default {
     // @ts-ignore
     async getYears() {
       const currentYear = new Date().getFullYear() - 2;
-      
-      let year = []
-      for(let i = currentYear; i <= currentYear + 9; i++) {
+
+      let year = [];
+      for (let i = currentYear; i <= currentYear + 9; i++) {
         year.push(i);
       }
-      
+
       this.years = year;
     },
     // @ts-ignore

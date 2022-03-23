@@ -24,7 +24,9 @@ class MonthDataService {
     const limit = l ?? 12;
     const page = p ?? 1;
 
-    return await http.get(`/months?isActive=true&_limit=${limit}&_page=${page}&_sort=order&_order=asc`);
+    return await http.get(
+      `/months?limit=${limit}&page=${page}&sort=order&order=asc`
+    );
   }
 
   /**
@@ -51,7 +53,9 @@ class MonthDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/months/${month}/entries?limit=${limit}&page=${page}`);
+    return await http.get(
+      `/months/${month}/entries?limit=${limit}&page=${page}`
+    );
   }
 
   /**
@@ -63,7 +67,9 @@ class MonthDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/months/${month}/estimates?limit=${limit}&page=${page}`);
+    return await http.get(
+      `/months/${month}/estimates?limit=${limit}&page=${page}`
+    );
   }
 
   /**
@@ -75,7 +81,9 @@ class MonthDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(`/months/${month}/expenses?limit=${limit}&page=${page}`);
+    return await http.get(
+      `/months/${month}/expenses?limit=${limit}&page=${page}`
+    );
   }
 }
 

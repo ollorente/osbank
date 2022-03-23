@@ -122,7 +122,7 @@ export default {
         name: this.user.name,
         password: this.user.password,
         phone: this.user.phone,
-      }
+      };
 
       try {
         // @ts-ignore

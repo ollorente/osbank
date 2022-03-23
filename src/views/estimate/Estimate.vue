@@ -21,8 +21,7 @@ export default {
     // @ts-ignore
     async getEstimate() {
       // const estimate = await DATA.filter(e => e.id === this.$route.params.estimate);
-// console.log(estimate[0]);
-
+      // console.log(estimate[0]);
       // this.estimate = Estimate(estimate[0]);
     },
   },

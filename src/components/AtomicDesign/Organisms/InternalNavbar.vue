@@ -5,9 +5,7 @@
     >
 
     <nav class="container mx-auto p-3 text-center">
-      <span class="text-xl font-semibold uppercase"
-        >{{ link.title }}</span
-      >
+      <span class="text-xl font-semibold uppercase">{{ link.title }}</span>
     </nav>
   </header>
 </template>

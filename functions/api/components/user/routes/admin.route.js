@@ -1,17 +1,17 @@
 // @ts-check
-const router = require('express').Router()
+const router = require("express").Router();
 
-const { Create, Get, List, Remove, Update } = require('../controllers')
+const { Create, Get, List, Remove, Update } = require("../controllers");
 
 router
-  .route('/')
+  .route("/")
   .post(Create)
-  .get(List)
+  .get(List);
 
 router
-  .route('/:id')
+  .route("/:id")
   .get(Get)
   .put(Update)
-  .delete(Remove)
+  .delete(Remove);
 
-module.exports = router
+module.exports = router;

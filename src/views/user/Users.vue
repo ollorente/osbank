@@ -4,18 +4,17 @@
 
     <main class="container mx-auto p-3">
       <section class="">
-        <ol v-for="(user, index) in users"
-          :key="index"
-        >
-          <router-link
-            :to="{ name: 'User', params: { user: user.id } }"
-          >
-            <div class="w-full bg-white rounded my-1 p-3 flex" :class="user.isActive ? 'opacity-100' : 'opacity-30'">
-            <div class="text-l font-bold mr-3">{{ ++index }}.</div> 
-            <div>
-              <span class="text-l font-bold">{{ user.name }}</span> <br />
-              <span class="text-l">{{ user.createdAt.split('T')[0] }}</span>
-            </div>
+        <ol v-for="(user, index) in users" :key="index">
+          <router-link :to="{ name: 'User', params: { user: user.id } }">
+            <div
+              class="w-full bg-white rounded my-1 p-3 flex"
+              :class="user.isActive ? 'opacity-100' : 'opacity-30'"
+            >
+              <div class="text-l font-bold mr-3">{{ ++index }}.</div>
+              <div>
+                <span class="text-l font-bold">{{ user.name }}</span> <br />
+                <span class="text-l">{{ user.createdAt.split("T")[0] }}</span>
+              </div>
             </div>
           </router-link>
         </ol>

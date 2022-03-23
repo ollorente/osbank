@@ -18,4 +18,4 @@ const User = (db) => {
   };
 };
 
-export default User
+export default User;
