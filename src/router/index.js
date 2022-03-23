@@ -5,7 +5,7 @@ const BASE_URL_TITLE = "© OsBank"
 const routes = [{
     path: "/",
     name: "Home",
-    component: () => import( /**/ "../views/Home.vue"),
+    component: () => import("@/views/Home.vue"),
     meta: {
       title: `Home ${BASE_URL_TITLE}`
     }
@@ -13,7 +13,7 @@ const routes = [{
   {
     path: "/gastos",
     name: "Expenses",
-    component: () => import( /**/ "../views/expense/Expenses.vue"),
+    component: () => import("@/views/expense/Expenses.vue"),
     meta: {
       title: `Gastos ${BASE_URL_TITLE}`
     }
@@ -21,7 +21,7 @@ const routes = [{
   {
     path: "/gastos/nuevo",
     name: "NewExpense",
-    component: () => import( /**/ "../views/expense/NewExpense.vue"),
+    component: () => import("@/views/expense/NewExpense.vue"),
     meta: {
       title: `Nuevo gasto ${BASE_URL_TITLE}`
     }
@@ -29,7 +29,7 @@ const routes = [{
   {
     path: "/gastos/:expense",
     name: "Expense",
-    component: () => import( /**/ "../views/expense/Expense.vue"),
+    component: () => import("@/views/expense/Expense.vue"),
     meta: {
       title: `Gasto ${BASE_URL_TITLE}`
     }
@@ -37,7 +37,7 @@ const routes = [{
   {
     path: "/gastos/:expense/editar",
     name: "EditExpense",
-    component: () => import( /**/ "../views/expense/EditExpense.vue"),
+    component: () => import("@/views/expense/EditExpense.vue"),
     meta: {
       title: `Editar gasto ${BASE_URL_TITLE}`
     }
@@ -45,7 +45,7 @@ const routes = [{
   {
     path: "/ingresos",
     name: "Entries",
-    component: () => import( /**/ "../views/entry/Entries.vue"),
+    component: () => import("@/views/entry/Entries.vue"),
     meta: {
       title: `Ingresos ${BASE_URL_TITLE}`
     }
@@ -53,7 +53,7 @@ const routes = [{
   {
     path: "/ingresos/nuevo",
     name: "NewEntry",
-    component: () => import( /**/ "../views/entry/NewEntry.vue"),
+    component: () => import("@/views/entry/NewEntry.vue"),
     meta: {
       title: `Nuevo ingreso ${BASE_URL_TITLE}`
     }
@@ -61,7 +61,7 @@ const routes = [{
   {
     path: "/ingresos/:entry",
     name: "Entry",
-    component: () => import( /**/ "../views/entry/Entry.vue"),
+    component: () => import("@/views/entry/Entry.vue"),
     meta: {
       title: `Ingreso ${BASE_URL_TITLE}`
     }
@@ -69,7 +69,7 @@ const routes = [{
   {
     path: "/ingresos/:entry/editar",
     name: "EditEntry",
-    component: () => import( /**/ "../views/entry/EditEntry.vue"),
+    component: () => import("@/views/entry/EditEntry.vue"),
     meta: {
       title: `Editar ingreso ${BASE_URL_TITLE}`
     }
@@ -77,7 +77,7 @@ const routes = [{
   {
     path: "/items",
     name: "Items",
-    component: () => import( /**/ "../views/item/Items.vue"),
+    component: () => import("@/views/item/Items.vue"),
     meta: {
       title: `Ítems ${BASE_URL_TITLE}`
     }
@@ -85,7 +85,7 @@ const routes = [{
   {
     path: "/items/nuevo",
     name: "NewItem",
-    component: () => import( /**/ "../views/item/NewItem.vue"),
+    component: () => import("@/views/item/NewItem.vue"),
     meta: {
       title: `Nuevo ítem ${BASE_URL_TITLE}`
     }
@@ -93,7 +93,7 @@ const routes = [{
   {
     path: "/items/:item",
     name: "Item",
-    component: () => import( /**/ "../views/item/Item.vue"),
+    component: () => import("@/views/item/Item.vue"),
     meta: {
       title: `Ítem ${BASE_URL_TITLE}`
     }
@@ -101,7 +101,7 @@ const routes = [{
   {
     path: "/items/:item/editar",
     name: "EditItem",
-    component: () => import( /**/ "../views/item/EditItem.vue"),
+    component: () => import("@/views/item/EditItem.vue"),
     meta: {
       title: `Editar ítem ${BASE_URL_TITLE}`
     }
@@ -109,7 +109,7 @@ const routes = [{
   {
     path: "/presupuesto",
     name: "Estimates",
-    component: () => import( /**/ "../views/estimate/Estimates.vue"),
+    component: () => import("@/views/estimate/Estimates.vue"),
     meta: {
       title: `Presupuesto ${BASE_URL_TITLE}`
     }
@@ -117,7 +117,7 @@ const routes = [{
   {
     path: "/presupuesto/nuevo",
     name: "NewEstimate",
-    component: () => import( /**/ "../views/estimate/NewEstimate.vue"),
+    component: () => import("@/views/estimate/NewEstimate.vue"),
     meta: {
       title: `Nuevo presupuesto ${BASE_URL_TITLE}`
     }
@@ -125,7 +125,7 @@ const routes = [{
   {
     path: "/presupuesto/:estimate",
     name: "Estimate",
-    component: () => import( /**/ "../views/estimate/Estimate.vue"),
+    component: () => import("@/views/estimate/Estimate.vue"),
     meta: {
       title: `Detalle presupuesto ${BASE_URL_TITLE}`
     }
@@ -133,7 +133,7 @@ const routes = [{
   {
     path: "/presupuesto/:estimate/editar",
     name: "EditEstimate",
-    component: () => import( /**/ "../views/estimate/EditEstimate.vue"),
+    component: () => import("@/views/estimate/EditEstimate.vue"),
     meta: {
       title: `Editar presupuesto ${BASE_URL_TITLE}`
     }
@@ -141,7 +141,7 @@ const routes = [{
   {
     path: "/login",
     name: "Login",
-    component: () => import( /**/ "../views/auth/Login.vue"),
+    component: () => import("@/views/auth/Login.vue"),
     meta: {
       title: `Login ${BASE_URL_TITLE}`
     }
@@ -149,7 +149,7 @@ const routes = [{
   {
     path: "/registro",
     name: "Logup",
-    component: () => import( /**/ "../views/auth/Logup.vue"),
+    component: () => import("@/views/auth/Logup.vue"),
     meta: {
       title: `Registro ${BASE_URL_TITLE}`
     }
@@ -157,7 +157,7 @@ const routes = [{
   {
     path: "/usuarios",
     name: "Users",
-    component: () => import( /**/ "../views/user/Users.vue"),
+    component: () => import("@/views/user/Users.vue"),
     meta: {
       title: `Usuarios ${BASE_URL_TITLE}`
     }
@@ -165,7 +165,7 @@ const routes = [{
   {
     path: "/usuarios/nuevo",
     name: "NewUser",
-    component: () => import( /**/ "../views/user/NewUser.vue"),
+    component: () => import("@/views/user/NewUser.vue"),
     meta: {
       title: `Nuevo usuario ${BASE_URL_TITLE}`
     }
@@ -173,7 +173,7 @@ const routes = [{
   {
     path: "/usuarios/:user",
     name: "User",
-    component: () => import( /**/ "../views/user/Users.vue"),
+    component: () => import("@/views/user/Users.vue"),
     meta: {
       title: `Detalle usuario ${BASE_URL_TITLE}`
     }
@@ -181,7 +181,7 @@ const routes = [{
   {
     path: "/usuarios/:user/editar",
     name: "EditUser",
-    component: () => import( /**/ "../views/user/EditUser.vue"),
+    component: () => import("@/views/user/EditUser.vue"),
     meta: {
       title: `Editar usuario ${BASE_URL_TITLE}`
     }
@@ -189,7 +189,7 @@ const routes = [{
   {
     path: "/*",
     name: "NotFound",
-    component: () => import( /**/ "../views/NotFound.vue"),
+    component: () => import("@/views/NotFound.vue"),
     meta: {
       title: `Página no encontrada ${BASE_URL_TITLE}`
     }
