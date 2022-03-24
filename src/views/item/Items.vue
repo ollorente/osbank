@@ -75,7 +75,7 @@ export default {
     };
   },
   created() {
-    this.getItems();
+    // this.getItems();
   },
   methods: {
     // @ts-ignore
@@ -104,7 +104,7 @@ export default {
     },
   },
   watch: {
-    $route: ["getItems"],
+    // $route: ["getItems"],
   },
 };
 </script>

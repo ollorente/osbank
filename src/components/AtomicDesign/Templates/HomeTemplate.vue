@@ -91,7 +91,7 @@ export default {
     };
   },
   created() {
-    this.getTotal();
+    // this.getTotal();
   },
   methods: {
     // @ts-ignore
@@ -115,7 +115,7 @@ export default {
     },
   },
   watch: {
-    $route: ["getTotal"],
+    // $route: ["getTotal"],
   },
 };
 </script>

@@ -65,7 +65,7 @@ export default {
     };
   },
   created() {
-    this.getEstimates();
+    // this.getEstimates();
   },
   methods: {
     // @ts-ignore
@@ -76,7 +76,7 @@ export default {
     },
   },
   watch: {
-    $route: ["getEstimates"],
+    // $route: ["getEstimates"],
   },
 };
 </script>

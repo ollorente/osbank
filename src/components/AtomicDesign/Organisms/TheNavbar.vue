@@ -3,6 +3,7 @@
     <router-link :to="{ name: 'Home' }" class="text-4xl font-bold"
       >OsBank</router-link
     >
+    <button class="absolute text-4xl text-gray-900 hover:text-white top-3 right-3" @click="logout"><i class="far fa-times-circle"></i></button>
 
     <nav class="container mx-auto p-3 flex justify-between align-center">
       <router-link
@@ -55,6 +56,14 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    async logout() {
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("user");
+
+      await this.$router.push("/login");
+    },
   },
 };
 </script>

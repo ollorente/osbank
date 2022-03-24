@@ -69,10 +69,15 @@
           <button class="w-full bg-gray-900 text-white rounded my-1 p-2">
             Registrarme
           </button>
-        </form>
 
-        <pre class="container hidden">{{ $data }}</pre>
+          <div class="py-5 text-center">
+            <router-link to="/login" class="text-gray-900 font-bold">
+              [ Login ]
+            </router-link>
+          </div>
+        </form>
       </section>
+        <pre class="container hidden">{{ $data }}</pre>
     </main>
   </div>
 </template>

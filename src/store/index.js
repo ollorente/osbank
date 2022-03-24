@@ -7,14 +7,31 @@ const store = createStore({
       user: null,
     };
   },
+  getters: {
+    isToken: state => state.token,
+    isUser: state => state.user,
+  },
   actions: {
+    async auth ({ commit }, payload) {
+      console.log("payload->", payload);
+      try {
+        localStorage.setItem("token", payload);
+
+        commit("SET_TOKEN", payload); 
+      } catch (error) {
+        // eslint-disable-next-line no-useless-return
+        if (error) return
+      }
+    },
+
     currentUser({ commit }) {
       const user = sessionStorage.getItem("user");
 
       commit("SET_CURRENT_USER", user);
     },
+
     currentToken({ commit }) {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token") ? true : false;
 
       commit("SET_CURRENT_TOKEN", token);
     },
@@ -26,6 +43,7 @@ const store = createStore({
     SET_CURRENT_TOKEN(state, payload) {
       state.token = payload;
     },
+    SET_TOKEN: (state, token) => (state.token, token),
   },
 });
 

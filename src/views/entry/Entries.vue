@@ -74,7 +74,7 @@ export default {
     };
   },
   created() {
-    this.getEntries();
+    // this.getEntries();
   },
   methods: {
     // @ts-ignore
@@ -103,7 +103,7 @@ export default {
     },
   },
   watch: {
-    $route: ["getEntries"],
+    // $route: ["getEntries"],
   },
 };
 </script>

@@ -34,16 +34,23 @@
           <button class="w-full bg-gray-900 text-white rounded my-1 p-2">
             Entrar
           </button>
-        </form>
 
-        <pre class="container hiddens">{{ $data }}</pre>
+          <div class="py-5 text-center">
+            <router-link to="/registro" class="text-gray-900 font-bold">
+              [ Registro ]
+            </router-link>
+          </div>
+        </form>
       </section>
+      <pre class="container hidden">{{ $data }}</pre>
     </main>
   </div>
 </template>
 
 <script>
 // @ts-check
+// @ts-ignore
+import { mapActions } from "vuex";
 // @ts-ignore
 import UserDataService from "@/services/UserDataService.js";
 
@@ -58,19 +65,24 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["auth"]),
     async authUser() {
+      // @ts-ignore
       if (this.user.username === null) {
         alert("El correo electrónico o teléfono no puede estar vacío!.");
         return;
       }
 
+      // @ts-ignore
       if (this.user.password === null) {
         alert("El password no puede estar vacío!.");
         return;
       }
 
       const data = {
+        // @ts-ignore
         username: this.user.username,
+        // @ts-ignore
         password: this.user.password,
       };
 
@@ -78,7 +90,6 @@ export default {
         // @ts-ignore
         const { error, token, user } = await UserDataService.auth(data)
           .then(async (response) => {
-            console.log(response.data);
             return await response.data;
           })
           .catch((error) => console.log(error));
@@ -88,13 +99,15 @@ export default {
           return;
         }
 
-        localStorage.setItem("token", token);
+        // localStorage.setItem("token", token);
+        console.log(token);
+        await this.auth(token);
         sessionStorage.setItem("user", JSON.stringify(user));
 
         // @ts-ignore
-        await this.$store.state.currentUser;
+        // await this.$store.state.currentUser;
         // @ts-ignore
-        await this.$store.state.currentToken;
+        // await this.$store.state.currentToken;
 
         // @ts-ignore
         await this.$router.push("/");
@@ -105,6 +118,7 @@ export default {
       }
     },
   },
+  computed: {},
 };
 </script>
 

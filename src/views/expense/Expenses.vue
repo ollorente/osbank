@@ -65,7 +65,7 @@ export default {
     };
   },
   created() {
-    this.getExpenses();
+    // this.getExpenses();
   },
   methods: {
     // @ts-ignore
@@ -76,7 +76,7 @@ export default {
     },
   },
   watch: {
-    $route: ["getExpenses"],
+    // $route: ["getExpenses"],
   },
 };
 </script>

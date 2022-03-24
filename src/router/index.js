@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "@/store";
 
 const BASE_URL_TITLE = "© OsBank";
 
@@ -9,6 +10,7 @@ const routes = [
     component: () => import("@/views/Home.vue"),
     meta: {
       title: `Home ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -17,6 +19,7 @@ const routes = [
     component: () => import("@/views/expense/Expenses.vue"),
     meta: {
       title: `Gastos ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -25,6 +28,7 @@ const routes = [
     component: () => import("@/views/expense/NewExpense.vue"),
     meta: {
       title: `Nuevo gasto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -33,6 +37,7 @@ const routes = [
     component: () => import("@/views/expense/Expense.vue"),
     meta: {
       title: `Gasto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -41,6 +46,7 @@ const routes = [
     component: () => import("@/views/expense/EditExpense.vue"),
     meta: {
       title: `Editar gasto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -49,6 +55,7 @@ const routes = [
     component: () => import("@/views/entry/Entries.vue"),
     meta: {
       title: `Ingresos ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -57,6 +64,7 @@ const routes = [
     component: () => import("@/views/entry/NewEntry.vue"),
     meta: {
       title: `Nuevo ingreso ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -65,6 +73,7 @@ const routes = [
     component: () => import("@/views/entry/Entry.vue"),
     meta: {
       title: `Ingreso ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -73,6 +82,7 @@ const routes = [
     component: () => import("@/views/entry/EditEntry.vue"),
     meta: {
       title: `Editar ingreso ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -81,6 +91,7 @@ const routes = [
     component: () => import("@/views/item/Items.vue"),
     meta: {
       title: `Ítems ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -89,6 +100,7 @@ const routes = [
     component: () => import("@/views/item/NewItem.vue"),
     meta: {
       title: `Nuevo ítem ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -97,6 +109,7 @@ const routes = [
     component: () => import("@/views/item/Item.vue"),
     meta: {
       title: `Ítem ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -105,6 +118,7 @@ const routes = [
     component: () => import("@/views/item/EditItem.vue"),
     meta: {
       title: `Editar ítem ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -113,6 +127,7 @@ const routes = [
     component: () => import("@/views/estimate/Estimates.vue"),
     meta: {
       title: `Presupuesto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -121,6 +136,7 @@ const routes = [
     component: () => import("@/views/estimate/NewEstimate.vue"),
     meta: {
       title: `Nuevo presupuesto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -129,6 +145,7 @@ const routes = [
     component: () => import("@/views/estimate/Estimate.vue"),
     meta: {
       title: `Detalle presupuesto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -137,6 +154,7 @@ const routes = [
     component: () => import("@/views/estimate/EditEstimate.vue"),
     meta: {
       title: `Editar presupuesto ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -161,22 +179,16 @@ const routes = [
     component: () => import("@/views/user/Users.vue"),
     meta: {
       title: `Usuarios ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
-    path: "/usuarios/nuevo",
-    name: "NewUser",
-    component: () => import("@/views/user/NewUser.vue"),
-    meta: {
-      title: `Nuevo usuario ${BASE_URL_TITLE}`,
-    },
-  },
-  {
-    path: "/usuarios/:user",
+    path: "/usuario",
     name: "User",
-    component: () => import("@/views/user/Users.vue"),
+    component: () => import("@/views/user/User.vue"),
     meta: {
       title: `Detalle usuario ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -185,6 +197,7 @@ const routes = [
     component: () => import("@/views/user/EditUser.vue"),
     meta: {
       title: `Editar usuario ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
   {
@@ -193,6 +206,7 @@ const routes = [
     component: () => import("@/views/NotFound.vue"),
     meta: {
       title: `Página no encontrada ${BASE_URL_TITLE}`,
+      requiredAuth: true,
     },
   },
 ];
@@ -205,6 +219,18 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title;
   next();
+
+  const privateRoute = to.matched.some((route) => route.meta.requiredAuth);
+// console.log("privateRoute->", privateRoute)
+// console.log("TokenGetters->", store.getters.isToken)
+// console.log("TokenState->", store.state.token)
+// console.log("UserGetters->", store.getters.isUser)
+// console.log("UserState->", store.getters.user)
+  if (privateRoute || store.state.token) {
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;
