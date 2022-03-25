@@ -5,7 +5,7 @@
     <main class="container mx-auto p-3">
       <section class="">
         <ol v-for="(user, index) in users" :key="index">
-          <router-link :to="{ name: 'User', params: { user: user.id } }">
+          <router-link :to="{ name: 'Profile', params: { user: user.id } }">
             <div
               class="w-full bg-white rounded my-1 p-3 flex"
               :class="user.isActive ? 'opacity-100' : 'opacity-30'"

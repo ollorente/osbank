@@ -83,10 +83,10 @@ export default {
           url: "/items/nuevo",
         },
         {
-          component: "User",
+          component: "Profile",
           icon: "fas fa-plus-circle",
           title: "Perfil",
-          url: "/usuario",
+          url: "/perfil",
         },
       ],
     };
@@ -100,7 +100,8 @@ export default {
       try {
         const { data, error } = await UserDataService.get()
           .then(async (response) => {
-            return await response.data;
+            const info = await response.data;
+            return info;
           })
           .catch((error) => console.log(error));
 

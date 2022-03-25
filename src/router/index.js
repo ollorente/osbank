@@ -183,11 +183,11 @@ const routes = [
     },
   },
   {
-    path: "/usuario",
-    name: "User",
-    component: () => import("@/views/user/User.vue"),
+    path: "/perfil",
+    name: "Profile",
+    component: () => import("@/views/user/Profile.vue"),
     meta: {
-      title: `Detalle usuario ${BASE_URL_TITLE}`,
+      title: `Perfil ${BASE_URL_TITLE}`,
       requiredAuth: true,
     },
   },

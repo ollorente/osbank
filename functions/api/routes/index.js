@@ -2,6 +2,8 @@
 const router = require("express").Router();
 const pkg = require("../../../package.json");
 
+const { EntryClientRoute } = require("../components/entry");
+const { MonthClientRoute } = require("../components/month");
 const { UserClientRoute } = require("../components/user");
 
 router.get("/", async (req, res) => {
@@ -14,6 +16,8 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.use("/entries", EntryClientRoute);
+router.use("/months", MonthClientRoute);
 router.use("/users", UserClientRoute);
 
 router.get("*", async (req, res) => {

@@ -16,10 +16,7 @@ class UserDataService {
     return await http.post(`/users`, data);
   }
 
-  /**
-   * @param {String} user
-   */
-  async get(user) {
+  async get() {
     return await http.get(`/users`);
   }
 

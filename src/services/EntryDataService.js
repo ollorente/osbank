@@ -13,7 +13,7 @@ class EntryDataService {
    * @param {string} entry
    */
   async get(entry) {
-    return await http.get(`/entries/${entry}?_expand=month`);
+    return await http.get(`/entries/${entry}`);
   }
 
   /**
@@ -24,9 +24,7 @@ class EntryDataService {
     const limit = l ?? 10;
     const page = p ?? 1;
 
-    return await http.get(
-      `/entries?isActive=true&limit=${limit}&page=${page}&sort=createdAt&order=desc&_expand=month`
-    );
+    return await http.get(`/entries?limit=${limit}&page=${page}`);
   }
 
   /**
