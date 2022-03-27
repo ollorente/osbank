@@ -1,3 +1,4 @@
+// @ts-check
 import { createStore } from "vuex";
 
 const store = createStore({
@@ -13,13 +14,11 @@ const store = createStore({
   },
   actions: {
     async auth ({ commit }, payload) {
-      console.log("payload->", payload);
       try {
         localStorage.setItem("token", payload);
 
         commit("SET_TOKEN", payload); 
       } catch (error) {
-        // eslint-disable-next-line no-useless-return
         if (error) return
       }
     },

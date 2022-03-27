@@ -100,7 +100,6 @@ export default {
         }
 
         // localStorage.setItem("token", token);
-        console.log(token);
         await this.auth(token);
         sessionStorage.setItem("user", JSON.stringify(user));
 
