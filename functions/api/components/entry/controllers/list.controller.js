@@ -1,12 +1,23 @@
 // @ts-check
 const EntryModel = require("../model");
 const { EntryRefInterface } = require("../dtos");
+const { UserModel } = require("../../user");
 const Paginator = require("../../../utils/paginator");
 
 module.exports = async (req, res, next) => {
   const { limit, page } = req.query;
   const P = Paginator(limit, page);
+
+  const userAuth = await UserModel.findById(req.user.id);
+
+  if (!userAuth)
+    return res.status(400).json({
+      error: true,
+      message: "Access denied.",
+    });
+
   const Options = {
+    userId: userAuth._id,
     isActive: true,
     isLock: false,
   };

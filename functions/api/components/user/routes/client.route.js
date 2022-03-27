@@ -19,4 +19,20 @@ router
   .route("/all")
   .get(verify, List);
 
+router
+  .route("/entries")
+  .get(verify, List);
+
+router
+  .route("/estimates")
+  .get(verify, List);
+
+router
+  .route("/expenses")
+  .get(verify, List);
+
+router
+  .route("/items")
+  .get(verify, List);
+
 module.exports = router;

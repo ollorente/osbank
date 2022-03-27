@@ -1,14 +1,13 @@
 // @ts-check
 const EntryModel = require("../model");
 const { EntryRefInterface } = require("../dtos");
+const { MonthModel } = require("../../month");
 const { UserModel } = require("../../user");
 
 module.exports = async (req, res, next) => {
   const { amount, detail, month, year } = req.body;
 
-  const userAuth = await UserModel.findOne({
-    _id: req.user.id,
-  });
+  const userAuth = await UserModel.findById(req.user.id);
 
   if (!userAuth)
     return res.status(400).json({
@@ -16,12 +15,22 @@ module.exports = async (req, res, next) => {
       message: "Access denied.",
     });
 
+  const monthData = await MonthModel.findOne({
+    order: month,
+  });
+
+  if (!monthData)
+    return res.status(400).json({
+      error: true,
+      message: "Month not exists.",
+    });
+
   let result;
   try {
     const newData = new EntryModel({
       amount,
       detail,
-      monthId: month,
+      monthId: monthData._id,
       year,
       userId: userAuth._id,
     });
