@@ -29,7 +29,7 @@ const EntrySchema = gql`
     updatedAt: String
   }
 
-  type EntryOptions {
+  input EntryOptions {
     limit: Int
     page: Int
   }
@@ -69,11 +69,11 @@ const EntryResolvers = {
         throw new Error(err.message);
       }
     },
-    entries: async (_, { options }, ctx) => {
+    entries: async (_, { options }, { user }) => {
       const { limit, page } = options;
       const P = Paginator(limit, page);
 
-      const userAuth = await UserModel.findById(ctx.user.id);
+      const userAuth = await UserModel.findById(user.id);
       if (!userAuth) throw new Error("Access denied.");
 
       let result;

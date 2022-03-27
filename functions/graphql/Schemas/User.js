@@ -33,7 +33,12 @@ const UserSchema = gql`
     updatedAt: String
   }
 
-  type UserOptions {
+  type UserData {
+    token: String!
+    user: ID!
+  }
+
+  input UserOptions {
     limit: Int
     page: Int
   }
@@ -41,11 +46,6 @@ const UserSchema = gql`
   input UserDataInput {
     username: String!
     password: String!
-  }
-
-  type UserData {
-    token: String!
-    user: ID!
   }
 
   input UserCreateInput {

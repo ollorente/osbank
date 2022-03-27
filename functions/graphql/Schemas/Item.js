@@ -25,7 +25,7 @@ const ItemSchema = gql`
     updatedAt: String
   }
 
-  type ItemOptions {
+  input ItemOptions {
     limit: Int
     page: Int
   }

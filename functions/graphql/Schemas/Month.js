@@ -28,7 +28,7 @@ const MonthSchema = gql`
     updatedAt: String
   }
 
-  type MonthOptions {
+  input MonthOptions {
     limit: Int
     page: Int
   }

@@ -31,7 +31,7 @@ const ExpenseSchema = gql`
     updatedAt: String
   }
 
-  type ExpenseOptions {
+  input ExpenseOptions {
     limit: Int
     page: Int
   }

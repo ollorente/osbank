@@ -31,7 +31,7 @@ const EstimateSchema = gql`
     updatedAt: String
   }
 
-  type EstimateOptions {
+  input EstimateOptions {
     limit: Int
     page: Int
   }
