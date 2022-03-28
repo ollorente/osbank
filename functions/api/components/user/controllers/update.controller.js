@@ -5,10 +5,15 @@ const UserModel = require("../model");
 const { UserInterface } = require("../dtos");
 
 module.exports = async (req, res, next) => {
-  const update = req.body;
+  const update = {
+    name: req.body.name,
+    password: req.body.password,
+    phone: req.body.phone,
+    isActive: req.body.isActive,
+    isLock: req.body.isLock,
+  };
 
   const userData = await UserModel.findById(req.user.id);
-
   if (!userData) {
     return res.status(400).json({
       error: `User not found!.`,
@@ -21,6 +26,17 @@ module.exports = async (req, res, next) => {
       const hash = await bcrypt.hash(update.password, 10);
       update.password = hash;
     }
+
+    // if (update.phone) {
+    //   const phoneData = await UserModel.findOne({ phone:  });
+    //   if (!phoneData) {
+    //     return res.status(400).json({
+    //       error: `User not found!.`,
+    //     });
+    //   }
+
+    //   update.password = hash;
+    // }
 
     result = await UserModel.findOneAndUpdate(
       {

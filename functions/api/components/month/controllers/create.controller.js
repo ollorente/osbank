@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
       message: "Access denied.",
     });
 
-  const monthData = await MonthModel.findOne({ name: name});
+  const monthData = await MonthModel.findOne({ name: name });
 
   if (monthData)
     return res.status(400).json({

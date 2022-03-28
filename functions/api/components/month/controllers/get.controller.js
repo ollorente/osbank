@@ -3,7 +3,7 @@ const { MonthInterface } = require("../dtos");
 const MonthModel = require("../model");
 
 module.exports = async (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   let result;
   try {

@@ -5,8 +5,10 @@ const {
   ApolloServerPluginLandingPageDisabled,
   ApolloServerPluginLandingPageGraphQLPlayground,
 } = require("apollo-server-core");
-const { typeDefs, resolvers } = require("./schema");
+// const express = require("express");
+// const verify = require("./utils/verifyToken");
 
+const { typeDefs, resolvers } = require("./schema");
 require("./database");
 
 const server = new ApolloServer({
@@ -17,9 +19,18 @@ const server = new ApolloServer({
       ? ApolloServerPluginLandingPageDisabled()
       : ApolloServerPluginLandingPageGraphQLPlayground(),
   ],
+  // @ts-ignore
+  context: () => {}
 });
 
-const serverHandler = server.createHandler();
+const serverHandler = server.createHandler({
+  // expressAppFromMiddleware: (middleware) => {
+  //   const app = express();
+  //   app.use(middleware);
+  //   app.use(verify);
+  //   return app;
+  // }
+});
 
 exports.handler = (event, context, callback) => {
   return serverHandler(

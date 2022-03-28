@@ -5,7 +5,13 @@ const { UserModel } = require("../../user");
 
 module.exports = async (req, res, next) => {
   const { id } = req.params;
-  const update = req.body;
+  const update = {
+    detail: req.body.detail,
+    item: req.body.item,
+    month: req.body.month,
+    year: req.body.year,
+    isActive: req.body.isActive,
+  };
 
   const userAuth = await UserModel.findById(req.user.id);
 

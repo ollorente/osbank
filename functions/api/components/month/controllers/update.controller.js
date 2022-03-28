@@ -5,10 +5,15 @@ const { UserModel } = require("../../user");
 
 module.exports = async (req, res, next) => {
   const { id } = req.params;
-  const update = req.body;
+  const update = {
+    name: req.body.name,
+    order: req.body.order,
+    start: req.body.start,
+    end: req.body.end,
+    isActive: req.body.isActive,
+  };
 
   const userAuth = await UserModel.findById(req.user.id);
-
   if (!userAuth) {
     return res.status(400).json({
       error: `Access denied.`,
@@ -16,7 +21,6 @@ module.exports = async (req, res, next) => {
   }
 
   const monthData = await MonthModel.findOne({ order: id });
-
   if (!monthData) {
     return res.status(400).json({
       error: `Month not exists.`,

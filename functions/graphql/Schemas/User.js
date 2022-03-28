@@ -35,7 +35,7 @@ const UserSchema = gql`
 
   type UserData {
     token: String!
-    user: ID!
+    user: User
   }
 
   input UserOptions {
@@ -80,7 +80,8 @@ const UserResolvers = {
         throw new Error(err.message);
       }
     },
-    users: async (_, { options }, ctx) => {
+    users: async (_, { options }, { user }) => {
+      console.log(user);
       const { limit, page } = options;
       const P = Paginator(limit, page);
 
@@ -123,13 +124,21 @@ const UserResolvers = {
 
       let result;
       try {
-        const token = JWT.sign({ id: userData._id }, process.env.SECRET_KEY, {
+        const token = await JWT.sign({ id: userData._id }, process.env.SECRET_KEY, {
           expiresIn: "7d",
         });
 
-        result = { user: userData._id, token: token };
+        result = {
+          user: {
+            id: await userData._id,
+            name: await userData.name,
+            isActive: await userData.isActive,
+            createdAt: await userData.createdAt,
+          },
+          token: token
+        };
 
-        return result;
+        return await result;
       } catch (err) {
         throw new Error(err.message);
       }

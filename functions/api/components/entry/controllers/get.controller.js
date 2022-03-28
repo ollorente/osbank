@@ -7,12 +7,11 @@ module.exports = async (req, res, next) => {
   const { id } = req.paramsM;
 
   const userAuth = await UserModel.findById(req.user.id);
-
-  if (!userAuth)
+  if (!userAuth) {
     return res.status(400).json({
-      error: true,
-      message: "Access denied.",
+      error: `Access denied.`,
     });
+  }
 
   let result;
   try {
