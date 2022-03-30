@@ -19,8 +19,9 @@ const ItemSchema = gql`
 
   type Item {
     id: ID!
+    name: String!
+    icon: String
     isActive: Boolean
-    isLock: Boolean
     createdAt: String
     updatedAt: String
   }
@@ -31,12 +32,15 @@ const ItemSchema = gql`
   }
 
   input ItemCreateInput {
+    name: String!
+    icon: String
     isActive: Boolean
   }
 
   input ItemUpdateInput {
+    name: String
+    icon: String
     isActive: Boolean
-    isLock: Boolean
   }
 `;
 
