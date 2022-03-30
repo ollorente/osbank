@@ -1,4 +1,5 @@
 // @ts-check
+// @ts-ignore
 const { gql } = require("apollo-server");
 
 const ExpenseModel = require("../Models/ExpenseModel");

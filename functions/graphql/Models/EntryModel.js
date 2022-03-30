@@ -1,4 +1,5 @@
 // @ts-check
+// @ts-ignore
 const { model, Schema } = require("mongoose");
 
 const UserModel = require("./UserModel");

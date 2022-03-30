@@ -1,6 +1,9 @@
 // @ts-check
+// @ts-ignore
 const { gql } = require("apollo-server");
+// @ts-ignore
 const bcrypt = require("bcryptjs");
+// @ts-ignore
 const JWT = require("jsonwebtoken");
 
 const UserModel = require("../Models/UserModel.js");
@@ -124,9 +127,13 @@ const UserResolvers = {
 
       let result;
       try {
-        const token = await JWT.sign({ id: userData._id }, process.env.SECRET_KEY, {
-          expiresIn: "7d",
-        });
+        const token = await JWT.sign(
+          { id: userData._id },
+          process.env.SECRET_KEY,
+          {
+            expiresIn: "7d",
+          }
+        );
 
         result = {
           user: {
@@ -135,7 +142,7 @@ const UserResolvers = {
             isActive: await userData.isActive,
             createdAt: await userData.createdAt,
           },
-          token: token
+          token: token,
         };
 
         return await result;

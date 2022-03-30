@@ -32,13 +32,13 @@ const serverHandler = server.createHandler({
   // }
 });
 
-exports.handler = (event, context, callback) => {
-  return serverHandler(
-    {
-      ...event,
-      requestContext: event.requestContext || {},
-    },
-    context,
-    callback
-  );
-};
+// exports.handler = (event, context, callback) => {
+//   return serverHandler(
+//     {
+//       ...event,
+//       requestContext: event.requestContext || {},
+//     },
+//     context,
+//     callback
+//   );
+// };
