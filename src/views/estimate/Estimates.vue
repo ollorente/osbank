@@ -17,7 +17,8 @@
         <div v-if="count === 0" class="w-full bg-white rounded my-1 p-3">
           No hay Presupuesto
         </div>
-        <pre class="container hidden">{{ $data }}</pre>
+        <div class="text-4xl p-5">{{ hello }}</div>
+        <pre class="container hiddens">{{ $data }}</pre>
       </section>
     </main>
 
@@ -46,6 +47,8 @@
 // @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
 
+import gql from "graphql-tag";
+
 export default {
   components: {
     TheNavbar,
@@ -64,19 +67,27 @@ export default {
       ],
     };
   },
-  created() {
-    // this.getEstimates();
-  },
-  methods: {
-    // @ts-ignore
-    async getEstimates() {
-      // const estimates = await DATA;
-      // this.count = await DATA.length;
-      // this.estimates = DATA.map((e) => Estimate(e));
+  apollo: {
+    estimates: {
+      query: gql`
+        query getEstimates($options: EstimateOptionsInput) {
+          estimates(options: $options) {
+            id
+            name
+            amount
+            itemId
+            monthId
+            year
+            isActive
+            createdAt
+            updatedAt
+          }
+        }
+      `,
+      variables: {
+        options: { limit: 10, page: 1 },
+      },
     },
-  },
-  watch: {
-    // $route: ["getEstimates"],
   },
 };
 </script>

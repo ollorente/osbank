@@ -2,7 +2,7 @@
   <div class="w-full min-h-screen bg-yellow-400 font-sans">
     <main class="container mx-auto">
       <section class="flex min-h-screen p-3">
-        <form @submit.prevent="addUser" class="m-auto">
+        <form @submit.prevent="signUpUser" class="m-auto">
           <p class="text-4xl font-bold text-center mb-4">OsBank</p>
 
           <h1 class="text-4xl text-center">Registro</h1>
@@ -84,6 +84,8 @@
 
 <script>
 // @ts-check
+import { mapActions } from "vuex"
+
 // @ts-ignore
 import UserDataService from "@/services/UserDataService.js";
 
@@ -101,31 +103,48 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      registerUser: "Auth/registerUser",
+    }),
+    signUpUser() {
+      // @ts-ignore
+      console.log(this.user)
+      // @ts-ignore
+      this.registerUser(this.user);
+    },
     async addUser() {
+      // @ts-ignore
       if (this.user.email === null) {
         alert("El correo electrónico no puede estar vacío!.");
         return;
       }
 
+      // @ts-ignore
       if (this.user.phone === null) {
         alert("El teléfono no puede estar vacío!.");
         return;
       }
 
+      // @ts-ignore
       if (this.user.password === null) {
         alert("El password no puede estar vacío!.");
         return;
       }
 
+      // @ts-ignore
       if (this.user.password_confirmation !== this.user.password) {
         alert("El password no coincide!.");
         return;
       }
 
       const user = {
+        // @ts-ignore
         email: this.user.email,
+        // @ts-ignore
         name: this.user.name,
+        // @ts-ignore
         password: this.user.password,
+        // @ts-ignore
         phone: this.user.phone,
       };
 
