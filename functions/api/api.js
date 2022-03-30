@@ -19,4 +19,4 @@ app.use("/.netlify/functions/api", require("./routes"));
 app.use(error404);
 app.use(errorHandler);
 
-// module.exports.handler = serverless(app);
+module.exports.handler = serverless(app);
