@@ -5,10 +5,11 @@ const { gql } = require('apollo-server')
 const ExpenseModel = require('../Models/Expense')
 const ItemModel = require('../Models/Item')
 const MonthModel = require('../Models/Month')
+const { ExpenseGet, ItemGet, MonthGet } = require('../utils/getData')
 const Paginator = require('../utils/paginator')
 const Verify = require('../utils/verifyToken')
 
-const ExpenseSchema = gql`
+exports.ExpenseSchema = gql`
   extend type Query {
     expense(id: ID!): Expense
     expenses(options: Options): [Expense]
@@ -24,8 +25,8 @@ const ExpenseSchema = gql`
     id: ID!
     name: String
     amount: Int!
-    item: String
-    month: String
+    item: Item!
+    month: Month!
     year: Int!
     isActive: Boolean
     createdAt: DateTime
@@ -51,7 +52,7 @@ const ExpenseSchema = gql`
   }
 `
 
-const ExpenseResolvers = {
+exports.ExpenseResolvers = {
   Query: {
     expense: async (_, { id }, { headers }) => {
       const user = Verify(headers)
@@ -103,10 +104,10 @@ const ExpenseResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const itemData = await ItemModel.findById(input.item)
+      const itemData = await ItemGet(input.item, user.id)
       if (!itemData) throw new Error('Item not exists.')
 
-      const monthData = await MonthModel.findOne({ order: input.month })
+      const monthData = await MonthGet(input.month)
       if (!monthData) throw new Error('Month not exists.')
 
       let result
@@ -130,23 +131,20 @@ const ExpenseResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const expenseData = await ExpenseModel.findOne({
-        _id: id,
-        userId: user.id
-      })
+      const expenseData = await ExpenseGet(id, user.id)
       if (!expenseData) throw new Error('Expense not exists or access denied.')
 
       let result
       try {
         if (input.item) {
-          const itemData = await ItemModel.findById(input.item)
+          const itemData = await ItemGet(input.item, user.id)
           if (!itemData) throw new Error('Item not exists.')
 
           input.itemId = itemData._id
         }
 
         if (input.month) {
-          const monthData = await MonthModel.findOne({ order: input.month })
+          const monthData = await MonthGet(input.month)
           if (!monthData) throw new Error('Month not exists.')
 
           input.monthId = monthData._id
@@ -174,10 +172,7 @@ const ExpenseResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const expenseData = await ExpenseModel.findOne({
-        _id: id,
-        userId: user.id
-      })
+      const expenseData = await ExpenseGet(id, user.id)
       if (!expenseData) return false
 
       try {
@@ -220,5 +215,3 @@ const ExpenseResolvers = {
     }
   }
 }
-
-module.exports = { ExpenseSchema, ExpenseResolvers }
