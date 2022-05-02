@@ -6,6 +6,8 @@ const bcrypt = require('bcryptjs')
 // @ts-ignore
 const JWT = require('jsonwebtoken')
 
+// const EstimateModel = require('../Models/Estimate')
+// const ExpenseModel = require('../Models/Expense')
 const UserModel = require('../Models/User')
 const Paginator = require('../utils/paginator')
 const Verify = require('../utils/verifyToken')
@@ -73,10 +75,9 @@ exports.UserResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const id = null
       let result
       try {
-        result = await UserModel.findById(id)
+        result = await UserModel.findById(user.id)
 
         return result
       } catch (err) {
@@ -264,9 +265,15 @@ exports.UserResolvers = {
     }
   },
   User: {
-    total: async ({ id }, args, ctx) => {},
-    estimate: async ({ id }, args, ctx) => {},
-    expense: async ({ id }, args, ctx) => {},
+    total: async ({ id }, args, ctx) => {
+      return 0
+    },
+    estimate: async ({ id }, args, ctx) => {
+      return 0
+    },
+    expense: async ({ id }, args, ctx) => {
+      return 0
+    },
     createdAt: async ({ createdAt }, args, ctx) => {
       return { _: new Date(createdAt).toISOString() }
     },
