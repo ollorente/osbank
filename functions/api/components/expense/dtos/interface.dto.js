@@ -1,12 +1,12 @@
 // @ts-check
-const { ItemRefInterface } = require("../../item/dtos");
-const { MonthRefInterface } = require("../../month/dtos");
-const { UserRefInterface } = require("../../user/dtos");
+const { ItemRefInterface } = require('../../item/dtos')
+const { MonthRefInterface } = require('../../month/dtos')
+const { UserRefInterface } = require('../../user/dtos')
 
 module.exports = (db) => {
   return {
     id: String(db._id),
-    name: String(db.name ? db.name : ""),
+    name: String(db.name ? db.name : ''),
     amount: Number(db.amount ? db.amount : 0),
     itemId: ItemRefInterface(db.itemId),
     monthId: MonthRefInterface(db.monthId),
@@ -14,6 +14,6 @@ module.exports = (db) => {
     userId: UserRefInterface(db.userId),
     isActive: Boolean(db.isActive),
     createdAt: db.createdAt,
-    updatedAt: db.updatedAt,
-  };
-};
+    updatedAt: db.updatedAt
+  }
+}

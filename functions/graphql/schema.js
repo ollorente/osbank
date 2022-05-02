@@ -1,13 +1,15 @@
 // @ts-check
-const { gql } = require("apollo-server-lambda");
-const { EntrySchema, EntryResolvers } = require("./Schemas/Entry");
-const { EstimateSchema, EstimateResolvers } = require("./Schemas/Estimate");
-const { ExpenseSchema, ExpenseResolvers } = require("./Schemas/Expense");
-const { ItemSchema, ItemResolvers } = require("./Schemas/Item");
-const { MonthSchema, MonthResolvers } = require("./Schemas/Month");
-const { UserSchema, UserResolvers } = require("./Schemas/User");
+// @ts-ignore
+const { gql } = require('apollo-server-lambda')
 
-const rootTypeDefs = gql`
+const { EntrySchema, EntryResolvers } = require('./Schemas/Entry')
+const { EstimateSchema, EstimateResolvers } = require('./Schemas/Estimate')
+const { ExpenseSchema, ExpenseResolvers } = require('./Schemas/Expense')
+const { ItemSchema, ItemResolvers } = require('./Schemas/Item')
+const { MonthSchema, MonthResolvers } = require('./Schemas/Month')
+const { UserSchema, UserResolvers } = require('./Schemas/User')
+
+const typeDefinitionss = gql`
   type Query {
     _: String
   }
@@ -15,23 +17,32 @@ const rootTypeDefs = gql`
   type Mutation {
     _: String
   }
-`;
 
-exports.typeDefs = [
-  rootTypeDefs,
+  type DateTime {
+    _: String
+  }
+
+  input Options {
+    limit: String
+    page: String
+  }
+`
+
+exports.rootTypeDefs = [
+  typeDefinitionss,
   EntrySchema,
   EstimateSchema,
   ExpenseSchema,
   ItemSchema,
   MonthSchema,
-  UserSchema,
-];
+  UserSchema
+]
 
-exports.resolvers = [
+exports.rootResolvers = [
   EntryResolvers,
   EstimateResolvers,
   ExpenseResolvers,
   ItemResolvers,
   MonthResolvers,
-  UserResolvers,
-];
+  UserResolvers
+]

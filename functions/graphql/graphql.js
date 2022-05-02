@@ -1,44 +1,45 @@
 // @ts-check
-require("dotenv").config();
-const { ApolloServer } = require("apollo-server-lambda");
-const {
-  ApolloServerPluginLandingPageDisabled,
-  ApolloServerPluginLandingPageGraphQLPlayground,
-} = require("apollo-server-core");
-// const express = require("express");
-// const verify = require("./utils/verifyToken");
+// @ts-ignore
+require('dotenv').config()
+const express = require('express')
+// @ts-ignore
+const { ApolloServer } = require('apollo-server-lambda')
+// @ts-ignore
+const { ApolloServerPluginLandingPageDisabled, ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
+const http = require('http')
 
-const { typeDefs, resolvers } = require("./schema");
-require("./database");
+const { rootTypeDefs, rootResolvers } = require('./schema')
+require('./database')
+
+const app = express()
+const httpServer = http.createServer(app)
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  typeDefs: rootTypeDefs,
+  resolvers: rootResolvers,
+  context: ({ event, context, express }) => ({
+    headers: event.headers,
+    functionName: context.functionName,
+    event,
+    context,
+    expressRequest: express.req
+  }),
   plugins: [
-    process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageDisabled()
-      : ApolloServerPluginLandingPageGraphQLPlayground(),
-  ],
-  // @ts-ignore
-  context: () => {}
-});
+    process.env.NODE_ENV === 'production' ? ApolloServerPluginLandingPageDisabled() : ApolloServerPluginLandingPageGraphQLPlayground(),
+    ApolloServerPluginDrainHttpServer({ httpServer })
+  ]
+})
 
-const serverHandler = server.createHandler({
-  // expressAppFromMiddleware: (middleware) => {
-  //   const app = express();
-  //   app.use(middleware);
-  //   app.use(verify);
-  //   return app;
-  // }
-});
+// @ts-ignore
+const serverHandler = server.createHandler({ app })
 
-// exports.handler = (event, context, callback) => {
-//   return serverHandler(
-//     {
-//       ...event,
-//       requestContext: event.requestContext || {},
-//     },
-//     context,
-//     callback
-//   );
-// };
+exports.handler = (event, context, callback) => {
+  return serverHandler(
+    {
+      ...event,
+      requestContext: event.requestContext || {}
+    },
+    context,
+    callback
+  )
+}

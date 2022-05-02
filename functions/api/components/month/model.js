@@ -1,5 +1,5 @@
 // @ts-check
-const { model, Schema } = require("mongoose");
+const { model, Schema } = require('mongoose')
 
 const dbSchema = new Schema(
   {
@@ -7,29 +7,29 @@ const dbSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true,
+      trim: true
     },
     order: {
       type: Number,
-      default: 1,
+      default: 1
     },
     start: {
       type: Number,
-      default: 1,
+      default: 1
     },
     end: {
       type: Number,
-      default: 30,
+      default: 30
     },
     isActive: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
-);
+)
 
-module.exports = model("Month", dbSchema);
+module.exports = model('Month', dbSchema)

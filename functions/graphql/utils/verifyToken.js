@@ -1,26 +1,18 @@
 // @ts-check
-const jwt = require("jsonwebtoken");
+// @ts-ignore
+const JWT = require('jsonwebtoken')
 
-module.exports = function (req, res, next) {
-  const token = req.header("Authorization");
-  if (!token) {
-    return res.status(401).json({
-      error: true,
-      message: "Access denied",
-    });
-  }
+module.exports = function (headers) {
+  const token = headers.authorization
+  if (!token) throw new Error('Access denied')
 
   try {
-    const bearer = token.split(" ")[1];
+    const bearer = token.split(' ')[1]
+    const verified = JWT.verify(bearer, process.env.SECRET_KEY)
 
-    const verified = jwt.verify(bearer, process.env.SECRET_KEY);
-    req.user = verified;
-
-    next();
+    return verified
   } catch (error) {
-    res.status(400).json({
-      error: true,
-      message: "Invalid token",
-    });
+    console.log(error)
+    throw new Error('Invalid token')
   }
-};
+}

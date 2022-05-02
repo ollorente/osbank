@@ -1,47 +1,47 @@
 // @ts-check
-import http from "./http-common";
+import http from './http-common'
 
 class MonthDataService {
   /**
    * @param {any} data
    */
-  async create(data) {
-    return await http.post(`/months`, data);
+  async create (data) {
+    return await http.post('/months', data)
   }
 
   /**
    * @param {any} month
    */
-  async get(month) {
-    return await http.get(`/months/${month}`);
+  async get (month) {
+    return await http.get(`/months/${month}`)
   }
 
   /**
    * @param {number} l
    * @param {number} p
    */
-  async list(l, p) {
-    const limit = l ?? 12;
-    const page = p ?? 1;
+  async list (l, p) {
+    const limit = l ?? 12
+    const page = p ?? 1
 
     return await http.get(
       `/months?limit=${limit}&page=${page}&sort=order&order=asc`
-    );
+    )
   }
 
   /**
    * @param {any} month
    */
-  async remove(month) {
-    return await http.delete(`/months/${month}`);
+  async remove (month) {
+    return await http.delete(`/months/${month}`)
   }
 
   /**
    * @param {any} month
    * @param {any} data
    */
-  async update(month, data) {
-    return await http.put(`/months/${month}`, data);
+  async update (month, data) {
+    return await http.put(`/months/${month}`, data)
   }
 
   /**
@@ -49,13 +49,13 @@ class MonthDataService {
    * @param {number} l
    * @param {number} p
    */
-  async entries(month, l, p) {
-    const limit = l ?? 10;
-    const page = p ?? 1;
+  async entries (month, l, p) {
+    const limit = l ?? 10
+    const page = p ?? 1
 
     return await http.get(
       `/months/${month}/entries?limit=${limit}&page=${page}`
-    );
+    )
   }
 
   /**
@@ -63,13 +63,13 @@ class MonthDataService {
    * @param {number} l
    * @param {number} p
    */
-  async estimates(month, l, p) {
-    const limit = l ?? 10;
-    const page = p ?? 1;
+  async estimates (month, l, p) {
+    const limit = l ?? 10
+    const page = p ?? 1
 
     return await http.get(
       `/months/${month}/estimates?limit=${limit}&page=${page}`
-    );
+    )
   }
 
   /**
@@ -77,14 +77,14 @@ class MonthDataService {
    * @param {number} l
    * @param {number} p
    */
-  async expenses(month, l, p) {
-    const limit = l ?? 10;
-    const page = p ?? 1;
+  async expenses (month, l, p) {
+    const limit = l ?? 10
+    const page = p ?? 1
 
     return await http.get(
       `/months/${month}/expenses?limit=${limit}&page=${page}`
-    );
+    )
   }
 }
 
-export default new MonthDataService();
+export default new MonthDataService()

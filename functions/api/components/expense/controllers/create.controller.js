@@ -1,35 +1,38 @@
 // @ts-check
-const ExpenseModel = require("../model");
-const { ExpenseRefInterface } = require("../dtos");
-const { ItemModel } = require("../../item");
-const { MonthModel } = require("../../month");
-const { UserModel } = require("../../user");
+const ExpenseModel = require('../model')
+const { ExpenseRefInterface } = require('../dtos')
+const { ItemModel } = require('../../item')
+const { MonthModel } = require('../../month')
+const { UserModel } = require('../../user')
 
 module.exports = async (req, res, next) => {
-  const { name, amount, item, month, year } = req.body;
+  const { name, amount, item, month, year } = req.body
 
-  const userAuth = await UserModel.findById(req.user.id);
-  if (!userAuth)
+  const userAuth = await UserModel.findById(req.user.id)
+  if (!userAuth) {
     return res.status(400).json({
       error: true,
-      message: "Access denied.",
-    });
+      message: 'Access denied.'
+    })
+  }
 
-  const itemData = await ItemModel.findById(item);
-  if (!itemData)
+  const itemData = await ItemModel.findById(item)
+  if (!itemData) {
     return res.status(400).json({
       error: true,
-      message: "Item not exists!.",
-    });
+      message: 'Item not exists!.'
+    })
+  }
 
-  const monthData = await MonthModel.findById(month);
-  if (!monthData)
+  const monthData = await MonthModel.findById(month)
+  if (!monthData) {
     return res.status(400).json({
       error: true,
-      message: "Month not exists!.",
-    });
+      message: 'Month not exists!.'
+    })
+  }
 
-  let result;
+  let result
   try {
     const newData = new ExpenseModel({
       name,
@@ -37,24 +40,24 @@ module.exports = async (req, res, next) => {
       itemId: itemData._id,
       monthId: monthData._id,
       year,
-      userId: userAuth._id,
-    });
+      userId: userAuth._id
+    })
 
     result = await newData.save().populate({
-      path: "monthId",
+      path: 'monthId',
       match: {
-        isActive: true,
-      },
-    });
+        isActive: true
+      }
+    })
 
     res.status(201).json({
       error: false,
-      data: ExpenseRefInterface(result),
-    });
+      data: ExpenseRefInterface(result)
+    })
   } catch (err) {
     res.status(500).json({
       error: true,
-      message: err.message,
-    });
+      message: err.message
+    })
   }
-};
+}

@@ -1,28 +1,28 @@
-const { model, Schema } = require("mongoose");
+const { model, Schema } = require('mongoose')
 
 const dbSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: true
     },
     icon: {
       type: String,
-      default: "",
+      default: ''
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User'
     },
     isActive: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
-);
+)
 
-module.exports = model("Item", dbSchema);
+module.exports = model('Item', dbSchema)

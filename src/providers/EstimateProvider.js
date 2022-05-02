@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import { provider } from "./apollo.provider"
+import { provider } from './apollo.provider'
 
 class EstimateProvider {
-  async create(data) {
-    const estimate = gql `
+  async create (data) {
+    const estimate = gql`
       mutation {
         estimateCreate(input: data) {
           id
@@ -22,29 +22,29 @@ class EstimateProvider {
     return await estimate
   }
 
-  async get(id) {
-    const data = gql ``
+  async get (id) {
+    const data = gql``
 
-    return await provider.defaultClient.mutate({})
+    return await provider.defaultClient.mutate(data)
   }
 
-  async list(l, p) {
-    const data = gql ``
+  async list (l, p) {
+    const data = gql``
 
-    return await provider.defaultClient.mutate({})
+    return await provider.defaultClient.mutate(data)
   }
 
-  async remove(id) {
-    const data = gql ``
+  async remove (id) {
+    const data = gql``
 
-    return await provider.defaultClient.mutate({})
+    return await provider.defaultClient.mutate(data)
   }
 
-  async update(id, data) {
-    const data = gql ``
+  async update (id, info) {
+    const data = gql``
 
-    return await provider.defaultClient.mutate({})
+    return await provider.defaultClient.mutate(data)
   }
 }
 
-export default new EstimateProvider();
+export default new EstimateProvider()

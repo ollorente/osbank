@@ -1,29 +1,31 @@
+const token = 'Bearer ' + localStorage.getItem('token') // eslint-disable-line
+
 const state = {
   authStatus: false,
-  token: localStorage.getItem("token") || null,
-  user: {},
+  token: token || null,
+  user: {}
 }
 
 const getters = {
   authStatus: state => state.authStatus,
   isAuth: state => !!state.token,
-  user: state => state.user,
+  user: state => state.user
 }
 
 const actions = {
-  registerUser({ commit }, userData) {
+  registerUser ({ commit }, userData) {
     commit('LOGIN_USER', userData)
     commit('SET_TOKEN', 'userDatatoken')
-  },
+  }
 }
 
 const mutations = {
-  LOGIN_USER(state, payload) {
+  LOGIN_USER (state, payload) {
     state.user = payload.user
     state.authStatus = true
   },
-  SET_TOKEN(state, payload) {
-    state.token= payload
+  SET_TOKEN (state, payload) {
+    state.token = payload
   }
 }
 
@@ -32,5 +34,5 @@ export default {
   getters,
   actions,
   mutations,
-  namespaced: true,
+  namespaced: true
 }

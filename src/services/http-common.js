@@ -1,10 +1,12 @@
 // @ts-check
-import axios from "axios";
+import axios from 'axios'
+
+const token = 'Bearer ' + localStorage.getItem('token') // eslint-disable-line
 
 export default axios.create({
-  baseURL: `/.netlify/functions`,
+  baseURL: '/.netlify/functions',
   headers: {
-    "Content-type": "application/json",
-    Authorization: "Bearer " + localStorage.getItem("token"),
-  },
-});
+    'Content-type': 'application/json',
+    Authorization: token
+  }
+})

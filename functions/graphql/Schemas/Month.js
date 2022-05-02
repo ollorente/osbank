@@ -1,15 +1,15 @@
 // @ts-check
 // @ts-ignore
-const { gql } = require("apollo-server");
+const { gql } = require('apollo-server')
 
-const MonthModel = require("../Models/MonthModel");
-const UserModel = require("../Models/UserModel");
-const Paginator = require("../utils/paginator");
+const MonthModel = require('../Models/Month')
+const Paginator = require('../utils/paginator')
+const Verify = require('../utils/verifyToken')
 
 const MonthSchema = gql`
   extend type Query {
     month(id: ID!): Month
-    months(options: MonthOptions): [Month]
+    months(options: Options): [Month]
   }
 
   extend type Mutation {
@@ -25,13 +25,8 @@ const MonthSchema = gql`
     start: Int!
     end: Int!
     isActive: Boolean
-    createdAt: String
-    updatedAt: String
-  }
-
-  input MonthOptions {
-    limit: Int
-    page: Int
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   input MonthCreateInput {
@@ -49,112 +44,125 @@ const MonthSchema = gql`
     end: Int
     isActive: Boolean
   }
-`;
+`
 
 const MonthResolvers = {
   Query: {
-    month: async (_, { id }, ctx) => {
-      let result;
-      try {
-        result = await MonthModel.findOne({ order: id });
+    month: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-        return result;
+      let result
+      try {
+        result = await MonthModel.findOne({ order: id })
+
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    months: async (_, { options }, ctx) => {
-      const { limit, page } = options;
-      const P = Paginator(limit, page);
+    months: async (_, { options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      let result;
+      const { limit, page } = options
+      const P = Paginator(limit, page)
+
+      let result
       try {
         result = await MonthModel.find({
-          isActive: true,
+          isActive: true
         })
           .limit(P.limit)
           .skip(P.page)
           .sort({
-            order: 1,
-          });
+            order: 1
+          })
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
   Mutation: {
-    monthCreate: async (_, { input }, ctx) => {
-      const { name, order, start, end } = input;
+    monthCreate: async (_, { input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+      const monthData = await MonthModel.findOne({ name: input.name })
+      if (monthData) throw new Error('Month exists.')
 
-      const monthData = await MonthModel.findOne({ name: name });
-      if (monthData) throw new Error("Month exists.");
-
-      let result;
+      let result
       try {
         const newData = new MonthModel({
-          name,
-          order,
-          start,
-          end,
-        });
+          ...input
+        })
 
-        result = await newData.save();
+        result = await newData.save()
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    monthUpdate: async (_, { id, input }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    monthUpdate: async (_, { id, input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const monthData = await MonthModel.findOne({ order: id });
-      if (!monthData) throw new Error("Month not exists.");
+      const monthData = await MonthModel.findOne({ order: id })
+      if (!monthData) throw new Error('Month not exists.')
 
-      let result;
+      let result
       try {
         result = await MonthModel.findOneAndUpdate(
           {
-            _id: monthData._id,
+            _id: monthData._id
           },
           {
-            $set: input,
+            $set: input
           },
           {
-            new: true,
+            new: true
           }
-        );
+        )
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    monthRemove: async (_, { id }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    monthRemove: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const monthData = await MonthModel.findOne({ order: id });
-      if (!monthData) throw new Error("Month exists.");
+      const monthData = await MonthModel.findOne({ order: id })
+      if (!monthData) return false
 
-      let result;
       try {
-        result = await MonthModel.deleteOne({
-          _id: monthData._id,
-        });
+        await MonthModel.deleteOne({
+          _id: monthData._id
+        })
 
-        return result;
+        return true
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
-};
+  Month: {
+    createdAt: async ({ createdAt }, args, ctx) => {
+      return { _: new Date(createdAt).toISOString() }
+    },
+    updatedAt: async ({ updatedAt }, args, ctx) => {
+      return { _: new Date(updatedAt).toISOString() }
+    }
+  }
+}
 
-module.exports = { MonthSchema, MonthResolvers };
+module.exports = { MonthSchema, MonthResolvers }

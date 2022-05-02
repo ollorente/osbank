@@ -1,15 +1,15 @@
 // @ts-check
 // @ts-ignore
-const { gql } = require("apollo-server");
+const { gql } = require('apollo-server')
 
-const ItemModel = require("../Models/ItemModel");
-const UserModel = require("../Models/UserModel");
-const Paginator = require("../utils/paginator");
+const ItemModel = require('../Models/Item')
+const Paginator = require('../utils/paginator')
+const Verify = require('../utils/verifyToken')
 
 const ItemSchema = gql`
   extend type Query {
     item(id: ID!): Item
-    items(options: ItemOptions): [Item]
+    items(options: Options): [Item]
   }
 
   extend type Mutation {
@@ -23,13 +23,8 @@ const ItemSchema = gql`
     name: String!
     icon: String
     isActive: Boolean
-    createdAt: String
-    updatedAt: String
-  }
-
-  input ItemOptions {
-    limit: Int
-    page: Int
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   input ItemCreateInput {
@@ -43,119 +38,128 @@ const ItemSchema = gql`
     icon: String
     isActive: Boolean
   }
-`;
+`
 
 const ItemResolvers = {
   Query: {
-    item: async (_, { id }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    item: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      let result;
+      let result
       try {
         result = await ItemModel.findOne({
           _id: id,
-          userId: userAuth._id,
-          isActive: true,
-        });
+          userId: user.id,
+          isActive: true
+        })
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    items: async (_, args, ctx) => {
-      const { limit, page } = args;
-      const P = Paginator(limit, page);
+    items: async (_, args, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+      const { limit, page } = args
+      const P = Paginator(limit, page)
 
-      let result;
+      let result
       try {
         result = await ItemModel.find({
-          userId: userAuth._id,
-          isActive: true,
+          userId: user.id,
+          isActive: true
         })
           .limit(P.limit)
           .skip(P.page)
           .sort({
-            name: 1,
-          });
+            name: 1
+          })
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
   Mutation: {
-    itemCreate: async (_, { input }, ctx) => {
-      const { name, icon } = input;
+    itemCreate: async (_, { input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
-
-      let result;
+      let result
       try {
         const newData = new ItemModel({
-          name,
-          icon,
-          userId: userAuth._id,
-        });
+          ...input,
+          userId: user.id
+        })
 
-        result = await newData.save();
+        result = await newData.save()
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    itemUpdate: async (_, { id, input }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    itemUpdate: async (_, { id, input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const itemData = await ItemModel.findById(id);
-      if (!itemData) throw new Error("Item not exists.");
+      const itemData = await ItemModel.findById(id)
+      if (!itemData) throw new Error('Item not exists.')
 
-      let result;
+      let result
       try {
         result = await ItemModel.findOneAndUpdate(
           {
-            _id: itemData._id,
+            _id: itemData._id
           },
           {
-            $set: input,
+            $set: input
           },
           {
-            new: true,
+            new: true
           }
-        );
+        )
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    itemRemove: async (_, { id }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    itemRemove: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const itemData = await ItemModel.findById(id);
-      if (!itemData) throw new Error("Item not exists.");
+      const itemData = await ItemModel.findById(id)
+      if (!itemData) return false
 
-      let result;
       try {
-        result = await ItemModel.deleteOne({
-          _id: itemData._id,
-        });
+        await ItemModel.deleteOne({
+          _id: itemData._id
+        })
 
-        return result;
+        return true
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
-};
+  Item: {
+    createdAt: async ({ createdAt }, args, ctx) => {
+      return { _: new Date(createdAt).toISOString() }
+    },
+    updatedAt: async ({ updatedAt }, args, ctx) => {
+      return { _: new Date(updatedAt).toISOString() }
+    }
+  }
+}
 
-module.exports = { ItemSchema, ItemResolvers };
+module.exports = { ItemSchema, ItemResolvers }

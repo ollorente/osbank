@@ -1,18 +1,21 @@
 // @ts-check
 // @ts-ignore
-const { gql } = require("apollo-server");
+const { gql } = require('apollo-server')
 // @ts-ignore
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs')
 // @ts-ignore
-const JWT = require("jsonwebtoken");
+const JWT = require('jsonwebtoken')
 
-const UserModel = require("../Models/UserModel.js");
-const Paginator = require("../utils/paginator");
+const UserModel = require('../Models/User')
+const Paginator = require('../utils/paginator')
+const Verify = require('../utils/verifyToken')
 
-const UserSchema = gql`
+exports.UserSchema = gql`
   extend type Query {
+    me: User
     user(id: ID!): User
-    users(options: UserOptions): [User]
+    users(options: Options): [User]
+    usersByName(id: String!, options: Options): [User]
   }
 
   extend type Mutation {
@@ -32,18 +35,13 @@ const UserSchema = gql`
     expense: Int
     isActive: Boolean
     isLock: Boolean
-    createdAt: String
-    updatedAt: String
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   type UserData {
     token: String!
     user: User
-  }
-
-  input UserOptions {
-    limit: Int
-    page: Int
   }
 
   input UserDataInput {
@@ -63,163 +61,217 @@ const UserSchema = gql`
     phone: String
     name: String
     password: String
-    total: Int
-    estimate: Int
-    expense: Int
     isActive: Boolean
     isLock: Boolean
   }
-`;
+`
 
-const UserResolvers = {
+exports.UserResolvers = {
   Query: {
-    user: async (_, { id }, ctx) => {
-      let result;
-      try {
-        result = await UserModel.findById(id);
+    me: async (_, args, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-        return result;
+      const id = null
+      let result
+      try {
+        result = await UserModel.findById(id)
+
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    users: async (_, { options }, { user }) => {
-      console.log(user);
-      const { limit, page } = options;
-      const P = Paginator(limit, page);
+    user: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      let result;
+      let result
+      try {
+        result = await UserModel.findById(id)
+
+        return result
+      } catch (err) {
+        throw new Error(err.message)
+      }
+    },
+    users: async (_, { options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const { limit, page } = options
+      const P = Paginator(limit, page)
+
+      let result
       try {
         result = await UserModel.find({
           isActive: true,
-          isLock: false,
+          isLock: false
         })
           .limit(P.limit)
           .skip(P.page)
           .sort({
-            name: 1,
-          });
+            name: 1
+          })
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
+    usersByName: async (_, { id, options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const { limit, page } = options
+      const P = Paginator(limit, page)
+
+      let result
+      try {
+        result = await UserModel.find({
+          isActive: true,
+          isLock: false
+        })
+          .limit(P.limit)
+          .skip(P.page)
+          .sort({
+            name: 1
+          })
+
+        return result
+      } catch (err) {
+        throw new Error(err.message)
+      }
+    }
   },
   Mutation: {
     auth: async (_, { input }, ctx) => {
-      const { username, password } = input;
+      const { username, password } = input
 
       const userData = await UserModel.findOne({
         $or: [
           {
-            email: username,
+            email: username
           },
           {
-            phone: username,
-          },
-        ],
-      });
-      if (!userData) throw new Error("User or password in wrong!.");
+            phone: username
+          }
+        ]
+      })
+      if (!userData) throw new Error('User or password in wrong!.')
 
-      const isEqual = await bcrypt.compare(password, userData.password);
-      if (!isEqual) throw new Error("User or password in wrong!.");
+      const isEqual = await bcrypt.compare(password, userData.password)
+      if (!isEqual) throw new Error('User or password in wrong!.')
 
-      let result;
+      let result
       try {
         const token = await JWT.sign(
           { id: userData._id },
           process.env.SECRET_KEY,
           {
-            expiresIn: "7d",
+            expiresIn: '7d'
           }
-        );
+        )
 
         result = {
           user: {
             id: await userData._id,
             name: await userData.name,
             isActive: await userData.isActive,
-            createdAt: await userData.createdAt,
+            createdAt: await userData.createdAt
           },
-          token: token,
-        };
+          token
+        }
 
-        return await result;
+        return await result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
     userCreate: async (_, { input }, ctx) => {
-      const { name, phone, email, password, isActive } = input;
+      const emailExist = await UserModel.findOne({ email: input.email })
+      if (emailExist) throw new Error('Email already exist!.')
 
-      const emailExist = await UserModel.findOne({ email: email });
-      if (emailExist) throw new Error("Email already exist!.");
+      const phoneExist = await UserModel.findOne({ phone: input.phone })
+      if (phoneExist) throw new Error('Phone already exist!.')
 
-      const phoneExist = await UserModel.findOne({ phone: phone });
-      if (phoneExist) throw new Error("Phone already exist!.");
-
-      let result;
+      let result
       try {
         const newData = new UserModel({
-          name,
-          phone,
-          email,
-          password,
-          isActive,
-        });
+          ...input
+        })
 
-        result = await newData.save();
+        result = await newData.save()
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    userUpdate: async (_, { id, input }, ctx) => {
-      const userData = await UserModel.findById(id);
-      if (!userData) throw new Error("User not found!.");
+    userUpdate: async (_, { id, input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      let result;
+      const userData = await UserModel.findById(id)
+      if (!userData) throw new Error('User not found!.')
+
+      let result
       try {
         if (input.password) {
-          const hash = await bcrypt.hash(input.password, 10);
-          input.password = hash;
+          const hash = await bcrypt.hash(input.password, 10)
+          input.password = hash
         }
 
         result = await UserModel.findOneAndUpdate(
           {
-            _id: userData._id,
+            _id: userData._id
           },
           {
-            $set: input,
+            $set: input
           },
           {
-            new: true,
+            new: true
           }
-        );
+        )
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    userRemove: async (_, { id }, ctx) => {
-      const userData = await UserModel.findById(id);
-      if (!userData) throw new Error("User not found!.");
+    userRemove: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const userData = await UserModel.findById(id)
+      if (!userData) return false
 
       try {
         await UserModel.deleteOne({
-          _id: userData._id,
-        });
+          _id: userData._id
+        })
 
-        return userData ? true : false;
+        return true
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
-  User: {},
-};
-
-module.exports = { UserSchema, UserResolvers };
+  User: {
+    total: async ({ id }, args, ctx) => {},
+    estimate: async ({ id }, args, ctx) => {},
+    expense: async ({ id }, args, ctx) => {},
+    createdAt: async ({ createdAt }, args, ctx) => {
+      return { _: new Date(createdAt).toISOString() }
+    },
+    updatedAt: async ({ updatedAt }, args, ctx) => {
+      return { _: new Date(updatedAt).toISOString() }
+    }
+  }
+}

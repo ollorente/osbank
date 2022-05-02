@@ -1,50 +1,50 @@
 // @ts-check
-const ExpenseModel = require("../model");
-const { ExpenseRefInterface } = require("../dtos");
-const { UserModel } = require("../../user");
-const Paginator = require("../../../utils/paginator");
+const ExpenseModel = require('../model')
+const { ExpenseRefInterface } = require('../dtos')
+const { UserModel } = require('../../user')
+const Paginator = require('../../../utils/paginator')
 
 module.exports = async (req, res, next) => {
-  const { limit, page } = req.query;
-  const P = Paginator(limit, page);
+  const { limit, page } = req.query
+  const P = Paginator(limit, page)
 
-  const userAuth = await UserModel.findById(req.user.id);
+  const userAuth = await UserModel.findById(req.user.id)
   if (!userAuth) {
     return res.status(400).json({
-      error: `Access denied.`,
-    });
+      error: 'Access denied.'
+    })
   }
 
   const Options = {
     isActive: true,
-    userId: userAuth._id,
-  };
+    userId: userAuth._id
+  }
 
-  let result, count;
+  let result, count
   try {
     result = await ExpenseModel.find(Options)
       .populate([
         {
-          path: "monthId",
-        },
+          path: 'monthId'
+        }
       ])
       .limit(P.limit)
       .skip(P.page)
       .sort({
-        createdAt: -1,
-      });
+        createdAt: -1
+      })
 
-    count = await ExpenseModel.countDocuments(Options);
+    count = await ExpenseModel.countDocuments(Options)
 
     res.status(200).json({
       error: false,
       count,
-      data: count > 0 ? result.map((e) => ExpenseRefInterface(e)) : [],
-    });
+      data: count > 0 ? result.map((e) => ExpenseRefInterface(e)) : []
+    })
   } catch (err) {
     res.status(500).json({
       error: true,
-      message: err.message,
-    });
+      message: err.message
+    })
   }
-};
+}

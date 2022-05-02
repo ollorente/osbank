@@ -2,11 +2,11 @@
 module.exports = {
   client: {
     service: {
-      name: "osbank",
+      name: 'osbank',
       // URL to the GraphQL API
-      url: "/.netlify/functions",
+      url: '/.netlify/functions'
     },
     // Files processed by the extension
-    includes: ["src/**/*.vue", "src/**/*.js"],
-  },
-};
+    includes: ['src/**/*.vue', 'src/**/*.js']
+  }
+}

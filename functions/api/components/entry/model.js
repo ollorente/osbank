@@ -1,55 +1,55 @@
 // @ts-check
-const { model, Schema } = require("mongoose");
+const { model, Schema } = require('mongoose')
 
-const { UserModel } = require("../user");
+const { UserModel } = require('../user')
 
 const dbSchema = new Schema(
   {
     amount: {
       type: Number,
-      default: 0,
+      default: 0
     },
     detail: {
       type: String,
-      default: "",
+      default: ''
     },
     monthId: {
       type: Schema.Types.ObjectId,
-      ref: "Month",
+      ref: 'Month'
     },
     year: {
       type: Number,
-      default: new Date().getFullYear(),
+      default: new Date().getFullYear()
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User'
     },
     isActive: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   {
     timestamps: true,
-    versionKey: false,
+    versionKey: false
   }
-);
+)
 
 // @ts-ignore
-dbSchema.pre("save", async function (next) {
+dbSchema.pre('save', async function (next) {
   await UserModel.findOneAndUpdate(
     {
-      _id: this.userId,
+      _id: this.userId
     },
     {
       $inc: {
-        total: this.amount,
-      },
+        total: this.amount
+      }
     }
-  );
+  )
 
-  next();
-});
+  next()
+})
 
-module.exports = model("Entry", dbSchema);
+module.exports = model('Entry', dbSchema)

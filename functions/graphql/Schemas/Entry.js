@@ -1,16 +1,16 @@
 // @ts-check
 // @ts-ignore
-const { gql } = require("apollo-server");
+const { gql } = require('apollo-server')
 
-const EntryModel = require("../Models/EntryModel");
-const MonthModel = require("../Models/MonthModel");
-const UserModel = require("../Models/UserModel");
-const Paginator = require("../utils/paginator");
+const EntryModel = require('../Models/Entry')
+const MonthModel = require('../Models/Month')
+const Paginator = require('../utils/paginator')
+const Verify = require('../utils/verifyToken')
 
 const EntrySchema = gql`
   extend type Query {
     entry(id: ID!): Entry
-    entries(options: EntryOptions): [Entry]
+    entries(options: Options): [Entry]
   }
 
   extend type Mutation {
@@ -26,13 +26,8 @@ const EntrySchema = gql`
     month: String
     year: Int!
     isActive: Boolean
-    createdAt: String
-    updatedAt: String
-  }
-
-  input EntryOptions {
-    limit: Int
-    page: Int
+    createdAt: DateTime
+    updatedAt: DateTime
   }
 
   input EntryCreateInput {
@@ -50,153 +45,148 @@ const EntrySchema = gql`
     year: Int
     isActive: Boolean
   }
-`;
+`
 
 const EntryResolvers = {
   Query: {
-    entry: async (_, { id }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    entry: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      let result;
+      let result
       try {
         result = await EntryModel.findOne({
           _id: id,
-          userId: userAuth._id,
-        });
+          userId: user.id
+        })
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    entries: async (_, { options }, { user }) => {
-      const { limit, page } = options;
-      const P = Paginator(limit, page);
+    entries: async (_, { options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userAuth = await UserModel.findById(user.id);
-      if (!userAuth) throw new Error("Access denied.");
+      const { limit, page } = options
+      const P = Paginator(limit, page)
 
-      let result;
+      let result
       try {
         result = await EntryModel.find({
-          userId: userAuth._id,
+          userId: user.id,
           isActive: true,
-          isLock: false,
+          isLock: false
         })
           .limit(P.limit)
           .skip(P.page)
           .sort({
-            createdAt: -1,
-          });
+            createdAt: -1
+          })
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
   Mutation: {
-    entryCreate: async (_, { input }, ctx) => {
-      const { amount, detail, month, year } = input;
+    entryCreate: async (_, { input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+      const monthData = await MonthModel.findOne({ order: input.month })
+      if (!monthData) throw new Error('Month not exists.')
 
-      const monthData = await MonthModel.findOne({ order: month });
-      if (!monthData) throw new Error("Month not exists.");
-
-      let result;
+      let result
       try {
         const newData = new EntryModel({
-          amount,
-          detail,
+          ...input,
           monthId: monthData._id,
-          year,
-          userId: userAuth._id,
-        });
+          userId: user.id
+        })
 
-        result = await newData.save();
+        result = await newData.save()
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    entryUpdate: async (_, { id, input }, ctx) => {
-      const userAuth = await UserModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    entryUpdate: async (_, { id, input }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
       const entryData = await EntryModel.findOne({
         _id: id,
-        userId: userAuth._id,
-      });
-      if (!entryData) throw new Error("Entry not exists or access denied.");
+        userId: user.id
+      })
+      if (!entryData) throw new Error('Entry not exists or access denied.')
 
-      let result;
+      let result
       try {
         result = await EntryModel.findOneAndUpdate(
           {
-            _id: entryData._id,
+            _id: entryData._id
           },
           {
-            $set: input,
+            $set: input
           },
           {
-            new: true,
+            new: true
           }
-        );
+        )
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-    entryRemove: async (_, { id }, ctx) => {
-      const userAuth = await EntryModel.findById(ctx.user.id);
-      if (!userAuth) throw new Error("Access denied.");
+    entryRemove: async (_, { id }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
 
       const entryData = await EntryModel.findOne({
         _id: id,
-        userId: userAuth._id,
-      });
-      if (!entryData) throw new Error("Entry not exists or access denied.");
+        userId: user.id
+      })
+      if (!entryData) return false
 
-      let result;
       try {
-        result = await EntryModel.deleteOne({
-          _id: entryData._id,
-        });
+        await EntryModel.deleteOne({
+          _id: entryData._id
+        })
 
-        await UserModel.findOneAndUpdate(
-          {
-            _id: userAuth._id,
-          },
-          {
-            $inc: {
-              total: -entryData.amount,
-            },
-          }
-        );
-
-        return result;
+        return true
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    },
+    }
   },
   Entry: {
     month: async ({ monthId }, args, ctx) => {
-      let result;
+      let result
       try {
-        result = await MonthModel.findById(monthId);
+        result = await MonthModel.findById(monthId)
 
-        return result;
+        return result
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
     },
-  },
-};
+    createdAt: async ({ createdAt }, args, ctx) => {
+      return { _: new Date(createdAt).toISOString() }
+    },
+    updatedAt: async ({ updatedAt }, args, ctx) => {
+      return { _: new Date(updatedAt).toISOString() }
+    }
+  }
+}
 
-module.exports = { EntrySchema, EntryResolvers };
+module.exports = { EntrySchema, EntryResolvers }
