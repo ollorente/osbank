@@ -23,8 +23,8 @@ const typeDefinitionss = gql`
   }
 
   input Options {
-    limit: String
-    page: String
+    limit: Int
+    page: Int
   }
 `
 
