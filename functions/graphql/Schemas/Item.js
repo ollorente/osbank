@@ -3,10 +3,11 @@
 const { gql } = require('apollo-server')
 
 const ItemModel = require('../Models/Item')
+const { ItemGet } = require('../utils/getData')
 const Paginator = require('../utils/paginator')
 const Verify = require('../utils/verifyToken')
 
-const ItemSchema = gql`
+exports.ItemSchema = gql`
   extend type Query {
     item(id: ID!): Item
     items(options: Options): [Item]
@@ -40,7 +41,7 @@ const ItemSchema = gql`
   }
 `
 
-const ItemResolvers = {
+exports.ItemResolvers = {
   Query: {
     item: async (_, { id }, { headers }) => {
       const user = Verify(headers)
@@ -111,7 +112,7 @@ const ItemResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const itemData = await ItemModel.findById(id)
+      const itemData = await ItemGet(id, user.id)
       if (!itemData) throw new Error('Item not exists.')
 
       let result
@@ -138,7 +139,7 @@ const ItemResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const itemData = await ItemModel.findById(id)
+      const itemData = await ItemGet(id, user.id)
       if (!itemData) return false
 
       try {
@@ -161,5 +162,3 @@ const ItemResolvers = {
     }
   }
 }
-
-module.exports = { ItemSchema, ItemResolvers }
