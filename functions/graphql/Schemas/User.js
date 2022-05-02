@@ -6,9 +6,11 @@ const bcrypt = require('bcryptjs')
 // @ts-ignore
 const JWT = require('jsonwebtoken')
 
-// const EstimateModel = require('../Models/Estimate')
-// const ExpenseModel = require('../Models/Expense')
+const EntryModel = require('../Models/Entry')
+const EstimateModel = require('../Models/Estimate')
+const ExpenseModel = require('../Models/Expense')
 const UserModel = require('../Models/User')
+const { UserGet } = require('../utils/getData')
 const Paginator = require('../utils/paginator')
 const Verify = require('../utils/verifyToken')
 
@@ -218,7 +220,7 @@ exports.UserResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userData = await UserModel.findById(id)
+      const userData = await UserGet(id)
       if (!userData) throw new Error('User not found!.')
 
       let result
@@ -250,12 +252,24 @@ exports.UserResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const userData = await UserModel.findById(id)
+      const userData = await UserGet(id)
       if (!userData) return false
 
       try {
         await UserModel.deleteOne({
           _id: userData._id
+        })
+
+        await EntryModel.deleteMany({
+          userId: userData._id
+        })
+
+        await EstimateModel.deleteMany({
+          userId: userData._id
+        })
+
+        await ExpenseModel.deleteMany({
+          userId: userData._id
         })
 
         return true
