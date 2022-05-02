@@ -4,10 +4,11 @@ const { gql } = require('apollo-server')
 
 const EntryModel = require('../Models/Entry')
 const MonthModel = require('../Models/Month')
+const { EntryGet, MonthGet } = require('../utils/getData')
 const Paginator = require('../utils/paginator')
 const Verify = require('../utils/verifyToken')
 
-const EntrySchema = gql`
+exports.EntrySchema = gql`
   extend type Query {
     entry(id: ID!): Entry
     entries(options: Options): [Entry]
@@ -23,7 +24,7 @@ const EntrySchema = gql`
     id: ID!
     amount: Int!
     detail: String
-    month: String
+    month: Month!
     year: Int!
     isActive: Boolean
     createdAt: DateTime
@@ -47,7 +48,7 @@ const EntrySchema = gql`
   }
 `
 
-const EntryResolvers = {
+exports.EntryResolvers = {
   Query: {
     entry: async (_, { id }, { headers }) => {
       const user = Verify(headers)
@@ -99,7 +100,7 @@ const EntryResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const monthData = await MonthModel.findOne({ order: input.month })
+      const monthData = await MonthGet(input.month)
       if (!monthData) throw new Error('Month not exists.')
 
       let result
@@ -122,14 +123,18 @@ const EntryResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const entryData = await EntryModel.findOne({
-        _id: id,
-        userId: user.id
-      })
-      if (!entryData) throw new Error('Entry not exists or access denied.')
+      const entryData = await EntryGet(id, user.id)
+      if (!entryData) throw new Error('Entry not exists.')
 
       let result
       try {
+        if (input.month) {
+          const monthData = await MonthGet(input.month)
+          if (!monthData) throw new Error('Month not exists.')
+
+          input.monthId = monthData._id
+        }
+
         result = await EntryModel.findOneAndUpdate(
           {
             _id: entryData._id
@@ -152,10 +157,7 @@ const EntryResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const entryData = await EntryModel.findOne({
-        _id: id,
-        userId: user.id
-      })
+      const entryData = await EntryGet(id, user.id)
       if (!entryData) return false
 
       try {
@@ -188,5 +190,3 @@ const EntryResolvers = {
     }
   }
 }
-
-module.exports = { EntrySchema, EntryResolvers }
