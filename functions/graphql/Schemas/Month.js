@@ -6,7 +6,7 @@ const MonthModel = require('../Models/Month')
 const Paginator = require('../utils/paginator')
 const Verify = require('../utils/verifyToken')
 
-const MonthSchema = gql`
+exports.MonthSchema = gql`
   extend type Query {
     month(id: ID!): Month
     months(options: Options): [Month]
@@ -46,7 +46,7 @@ const MonthSchema = gql`
   }
 `
 
-const MonthResolvers = {
+exports.MonthResolvers = {
   Query: {
     month: async (_, { id }, { headers }) => {
       const user = Verify(headers)
@@ -164,5 +164,3 @@ const MonthResolvers = {
     }
   }
 }
-
-module.exports = { MonthSchema, MonthResolvers }
