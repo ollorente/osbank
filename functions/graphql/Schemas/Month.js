@@ -67,8 +67,7 @@ exports.MonthResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const { limit, page } = options
-      const P = Paginator(limit, page)
+      const P = Paginator(options.limit, options.page)
 
       let result
       try {
