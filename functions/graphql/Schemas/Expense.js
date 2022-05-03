@@ -13,6 +13,7 @@ exports.ExpenseSchema = gql`
   extend type Query {
     expense(id: ID!): Expense
     expenses(options: Options): [Expense]
+    expensesByName(id: String!, options: Options): [Expense]
   }
 
   extend type Mutation {
@@ -76,8 +77,32 @@ exports.ExpenseResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const { limit, page } = options
-      const P = Paginator(limit, page)
+      const P = Paginator(options.limit, options.page)
+
+      let result
+      try {
+        result = await ExpenseModel.find({
+          userId: user.id,
+          isActive: true,
+          isLock: false
+        })
+          .limit(P.limit)
+          .skip(P.page)
+          .sort({
+            createdAt: -1
+          })
+
+        return result
+      } catch (err) {
+        throw new Error(err.message)
+      }
+    },
+    expensesByName: async (_, { id, options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const P = Paginator(options.limit, options.page)
 
       let result
       try {

@@ -12,6 +12,7 @@ exports.EntrySchema = gql`
   extend type Query {
     entry(id: ID!): Entry
     entries(options: Options): [Entry]
+    entriesByName(id: String!, options: Options): [Entry]
   }
 
   extend type Mutation {
@@ -72,8 +73,32 @@ exports.EntryResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const { limit, page } = options
-      const P = Paginator(limit, page)
+      const P = Paginator(options.limit, options.page)
+
+      let result
+      try {
+        result = await EntryModel.find({
+          userId: user.id,
+          isActive: true,
+          isLock: false
+        })
+          .limit(P.limit)
+          .skip(P.page)
+          .sort({
+            createdAt: -1
+          })
+
+        return result
+      } catch (err) {
+        throw new Error(err.message)
+      }
+    },
+    entriesByName: async (_, { id, options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const P = Paginator(options.limit, options.page)
 
       let result
       try {

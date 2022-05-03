@@ -13,6 +13,7 @@ exports.EstimateSchema = gql`
   extend type Query {
     estimate(id: ID!): Estimate
     estimates(options: Options): [Estimate]
+    estimatesByName(id: String!, options: Options): [Estimate]
   }
 
   extend type Mutation {
@@ -76,8 +77,32 @@ exports.EstimateResolvers = {
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const { limit, page } = options
-      const P = Paginator(limit, page)
+      const P = Paginator(options.limit, options.page)
+
+      let result
+      try {
+        result = await EstimateModel.find({
+          userId: user.id,
+          isActive: true,
+          isLock: false
+        })
+          .limit(P.limit)
+          .skip(P.page)
+          .sort({
+            createdAt: -1
+          })
+
+        return result
+      } catch (err) {
+        throw new Error(err.message)
+      }
+    },
+    estimatesByName: async (_, { id, options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const P = Paginator(options.limit, options.page)
 
       let result
       try {

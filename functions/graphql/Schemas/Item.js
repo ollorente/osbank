@@ -11,6 +11,7 @@ exports.ItemSchema = gql`
   extend type Query {
     item(id: ID!): Item
     items(options: Options): [Item]
+    itemsByName(id: String!, options: Options): [Item]
   }
 
   extend type Mutation {
@@ -61,13 +62,36 @@ exports.ItemResolvers = {
         throw new Error(err.message)
       }
     },
-    items: async (_, args, { headers }) => {
+    items: async (_, { options }, { headers }) => {
       const user = Verify(headers)
       // @ts-ignore
       if (!user?.id) throw new Error('Unauthorized!.')
 
-      const { limit, page } = args
-      const P = Paginator(limit, page)
+      const P = Paginator(options.limit, options.page)
+
+      let result
+      try {
+        result = await ItemModel.find({
+          userId: user.id,
+          isActive: true
+        })
+          .limit(P.limit)
+          .skip(P.page)
+          .sort({
+            name: 1
+          })
+
+        return result
+      } catch (err) {
+        throw new Error(err.message)
+      }
+    },
+    itemsByName: async (_, { id, options }, { headers }) => {
+      const user = Verify(headers)
+      // @ts-ignore
+      if (!user?.id) throw new Error('Unauthorized!.')
+
+      const P = Paginator(options.limit, options.page)
 
       let result
       try {
