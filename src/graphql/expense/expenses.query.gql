@@ -1,0 +1,23 @@
+query GetExpense($options: Options) {
+  expenses(options: $options) {
+    id
+    name
+    amount
+    item {
+      id
+      name
+    }
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

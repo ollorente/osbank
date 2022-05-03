@@ -1,0 +1,19 @@
+query GetEntriesByName($id: String!, $options: Options) {
+  entriesByName(id: $id, options: $options) {
+    id
+    amount
+    detail
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

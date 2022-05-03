@@ -1,0 +1,16 @@
+query GetMonths($options: Options) {
+  months(options: $options) {
+    id
+    name
+    order
+    start
+    end
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

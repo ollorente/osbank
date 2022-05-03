@@ -1,0 +1,3 @@
+mutation RemoveEstimate($id: ID!) {
+  estimateRemove(id: $id)
+}

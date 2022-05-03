@@ -1,0 +1,19 @@
+mutation UpdateEntry($id: ID!, $input: EntryUpdateInput!) {
+  entryUpdate(id: $id, input: $input) {
+    id
+    amount
+    detail
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

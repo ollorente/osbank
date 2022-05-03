@@ -1,0 +1,19 @@
+query GetUsers($options: Options) {
+  users(options: $options) {
+    id
+    phone
+    name
+    email
+    total
+    estimate
+    expense
+    isActive
+    isLock
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

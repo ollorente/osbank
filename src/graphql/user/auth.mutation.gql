@@ -1,0 +1,13 @@
+mutation Auth($input: UserDataInput!) {
+  auth(input: $input) {
+    token
+    user {
+      id
+      name
+      isActive
+      createdAt {
+        _
+      }
+    }
+  }
+}

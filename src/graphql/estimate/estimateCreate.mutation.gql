@@ -1,0 +1,23 @@
+mutation CreateEstimate($input: EstimateCreateInput!) {
+  estimateCreate(input: $input) {
+    id
+    name
+    amount
+    item {
+      id
+      name
+    }
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

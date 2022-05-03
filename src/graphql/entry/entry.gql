@@ -1,0 +1,19 @@
+query getEntry($id: ID!) {
+  entry(id: $id) {
+    id
+    amount
+    detail
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

@@ -1,0 +1,19 @@
+mutation CreateEntry($input: EntryCreateInput!) {
+  entryCreate(input: $input) {
+    id
+    amount
+    detail
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

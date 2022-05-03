@@ -1,0 +1,3 @@
+mutation removeMonth($id: ID!) {
+  monthRemove(id: $id)
+}

@@ -1,0 +1,19 @@
+query GetEntries($options: Options) {
+  entries(options: $options) {
+    id
+    amount
+    detail
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

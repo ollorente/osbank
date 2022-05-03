@@ -1,0 +1,14 @@
+query GetItem($options: Options) {
+  items(options: $options) {
+    id
+    name
+    icon
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

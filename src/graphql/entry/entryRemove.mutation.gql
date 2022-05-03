@@ -1,0 +1,3 @@
+mutation RemoveEntry($id: ID!) {
+  entryRemove(id: $id)
+}

@@ -1,0 +1,14 @@
+query GetItem($id: ID!) {
+  item(id: $id) {
+    id
+    name
+    icon
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

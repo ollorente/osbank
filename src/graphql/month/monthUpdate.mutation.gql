@@ -1,0 +1,16 @@
+mutation UpdateMonth($id: ID!, $input: MonthUpdateInput!) {
+  monthUpdate(id: $id, input: $input) {
+    id
+    name
+    order
+    start
+    end
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

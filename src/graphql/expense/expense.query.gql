@@ -1,0 +1,23 @@
+query GetExpense($id: ID!) {
+ expense(id: $id) {
+    id
+    name
+    amount
+    item {
+      id
+      name
+    }
+    month {
+      name
+      order
+    }
+    year
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

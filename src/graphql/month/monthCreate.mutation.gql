@@ -1,0 +1,16 @@
+mutation CreateMonth($input: MonthCreateInput!) {
+  monthCreate(input: $input) {
+    id
+    name
+    order
+    start
+    end
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

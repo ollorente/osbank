@@ -1,0 +1,19 @@
+mutation CreateUser($input: UserCreateInput!) {
+  userCreate(input: $input) {
+    id
+    phone
+    name
+    email
+    total
+    estimate
+    expense
+    isActive
+    isLock
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

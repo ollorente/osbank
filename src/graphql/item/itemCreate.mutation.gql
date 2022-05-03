@@ -1,0 +1,14 @@
+mutation CreateItem($input: ItemCreateInput!) {
+  itemCreate(input: $input) {
+    id
+    name
+    icon
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

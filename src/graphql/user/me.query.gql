@@ -1,0 +1,19 @@
+query Me {
+  me {
+    id
+    phone
+    name
+    email
+    total
+    estimate
+    expense
+    isActive
+    isLock
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

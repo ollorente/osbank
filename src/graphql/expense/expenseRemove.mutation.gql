@@ -1,0 +1,3 @@
+mutation RemoveExpense($id: ID!) {
+  expenseRemove(id: $id)
+}

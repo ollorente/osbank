@@ -1,0 +1,16 @@
+query GetMonth($id: ID!) {
+  month(id: $id) {
+    id
+    name
+    order
+    start
+    end
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}

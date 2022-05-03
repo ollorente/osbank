@@ -1,0 +1,14 @@
+mutation UpdateItem($id: ID!, $input: ItemUpdateInput!) {
+  itemUpdate(id: $id, input: $input) {
+    id
+    name
+    icon
+    isActive
+    createdAt {
+      _
+    }
+    updatedAt {
+      _
+    }
+  }
+}
