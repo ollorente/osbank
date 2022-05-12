@@ -18,24 +18,6 @@
             />
           </div>
           <div class="py-2">
-            <label for="icon" class="font-semibold ml-3">Tipo</label>
-            <select
-              name="icon"
-              v-model="entry.icon"
-              id="icon"
-              class="w-full bg-white rounded p-2"
-            >
-              <option value="null" selected>-- Seleccione un tipo --</option>
-              <option
-                v-for="(icon, index) in icons"
-                :key="index"
-                :value="icon.icon"
-              >
-                {{ icon.title }}
-              </option>
-            </select>
-          </div>
-          <div class="py-2">
             <label for="monthId" class="font-semibold ml-3">Mes</label>
             <select
               name="monthId"
@@ -114,8 +96,6 @@ import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.v
 // @ts-ignore
 import EntryDataService from "@/graphql/EntryDataService.js";
 // @ts-ignore
-import ItemsDataService from "@/graphql/ItemsDataService.js";
-// @ts-ignore
 import MonthDataService from "@/graphql/MonthDataService.js";
 
 export default {
@@ -129,7 +109,6 @@ export default {
         icon: "",
         isActive: "",
       },
-      items: [],
       months: [],
       years: [],
       limit: 100,
@@ -176,7 +155,6 @@ export default {
   },
   created() {
     this.getEntry();
-    this.getItems();
     this.getMonths();
     this.getYears();
   },
@@ -235,26 +213,6 @@ export default {
       }
     },
     // @ts-ignore
-    async getItems() {
-      try {
-        await ItemDataService.list(this.limit, this.page)
-          .then((r) => r.json())
-          .then(async (response) => {
-            const { data, errors } = await response;
-
-            if (errors) {
-              console.log(errors[0].message);
-              return;
-            }
-
-            this.items = data.items;
-          })
-          .catch((error) => console.log(error));
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // @ts-ignore
     async getMonths() {
       try {
         this.page++;
@@ -289,7 +247,7 @@ export default {
     },
   },
   watch: {
-    $route: ["getEntry", "getItems", "getMonths", "getYears"],
+    $route: ["getEntry", "getMonths", "getYears"],
   },
 };
 </script>
