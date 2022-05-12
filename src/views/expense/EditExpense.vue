@@ -36,11 +36,11 @@
             </select>
           </div>
           <div class="py-2">
-            <label for="monthId" class="font-semibold ml-3">Mes</label>
+            <label for="month" class="font-semibold ml-3">Mes</label>
             <select
-              name="monthId"
-              v-model="entry.monthId"
-              id="monthId"
+              name="month"
+              v-model="entry.month"
+              id="month"
               class="w-full bg-white rounded p-2"
             >
               <option value="null" selected>-- Seleccione un mes --</option>
@@ -93,7 +93,10 @@
       <router-link
         v-for="(link, index) in footLinks"
         :key="index"
-        :to="{ name: link.component, params: { expense: $route.params.expense } }"
+        :to="{
+          name: link.component,
+          params: { expense: $route.params.expense },
+        }"
         class="w-1/3 text-gray-900 font-normal hover:text-white uppercase mx-auto p-0"
       >
         <div class="flex flex-col">
@@ -126,7 +129,10 @@ export default {
     return {
       expense: {
         name: "",
-        icon: "",
+        amount: "",
+        item: "",
+        month: "",
+        year: "",
         isActive: "",
       },
       months: [],
@@ -188,7 +194,10 @@ export default {
 
       const expense = {
         name: this.expense.name,
-        icon: this.expense.icon,
+        amount: this.expense.amount,
+        item: this.expense.item,
+        month: this.expense.month,
+        year: this.expense.year,
         isActive: this.expense.isActive,
       };
 
