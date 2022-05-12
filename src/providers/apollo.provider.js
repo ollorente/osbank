@@ -5,7 +5,7 @@ const cache = new InMemoryCache()
 
 const client = new ApolloClient({
   cache,
-  uri: '/.netlify/functions'
+  uri: '/.netlify/functions/graphql'
 })
 
 export const provider = createApolloProvider({
