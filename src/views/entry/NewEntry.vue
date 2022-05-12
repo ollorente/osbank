@@ -6,41 +6,41 @@
       <section class="">
         <form @submit.prevent="addEntry">
           <div class="py-2">
-            <label for="amount" class="font-semibold ml-3">Monto *</label>
+            <label for="name" class="font-semibold ml-3">Nombre *</label>
             <input
-              type="number"
+              type="text"
               class="w-full bg-white rounded p-2"
-              id="amount"
-              min="0"
-              v-model="entry.amount"
-              placeholder="Monto *"
+              id="name"
+              v-model="entry.name"
+              placeholder="Nombre *"
               autofocus
               required
             />
           </div>
           <div class="py-2">
-            <label for="detail" class="font-semibold ml-3">Detalle</label>
+            <label for="amount" class="font-semibold ml-3">Cantidad *</label>
             <input
-              type="text"
+              type="number"
               class="w-full bg-white rounded p-2"
-              id="detail"
-              v-model="entry.detail"
-              placeholder="Detalle"
+              id="amount"
+              v-model="entry.amount"
+              placeholder="Cantidad *"
+              required
             />
           </div>
           <div class="py-2">
-            <label for="monthId" class="font-semibold ml-3">Mes</label>
+            <label for="month" class="font-semibold ml-3">Mes</label>
             <select
-              name="monthId"
-              v-model="entry.monthId"
-              id="monthId"
+              name="month"
+              v-model="entry.month"
+              id="month"
               class="w-full bg-white rounded p-2"
             >
               <option value="null" selected>-- Seleccione un mes --</option>
               <option
                 v-for="(month, index) in months"
                 :key="index"
-                :value="month.id"
+                :value="month.order"
               >
                 {{ month.name }}
               </option>
@@ -60,7 +60,10 @@
               </option>
             </select>
           </div>
-          <button class="w-full bg-gray-900 text-white rounded my-1 p-2">
+          <button
+            type="submit"
+            class="w-full bg-gray-900 text-white rounded my-1 p-2"
+          >
             Agregar
           </button>
         </form>
@@ -92,13 +95,11 @@
 <script>
 // @ts-check
 // @ts-ignore
-import EntryDataService from "@/services/EntryDataService";
-// @ts-ignore
-import MonthDataService from "@/services/MonthDataService";
-// @ts-ignore
-import EntryInterface from "@/interfaces/EntryInterface.js";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import EntryDataService from "@/graphql/EntryDataService";
+// @ts-ignore
+import MonthDataService from "@/graphql/MonthDataService";
 
 export default {
   components: {
@@ -107,14 +108,14 @@ export default {
   data() {
     return {
       entry: {
+        name: null,
         amount: null,
-        detail: null,
-        monthId: null,
+        month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
       },
       months: [],
       years: [],
-      limit: 20,
+      limit: 100,
       page: 1,
       footLinks: [
         {
@@ -136,15 +137,55 @@ export default {
   },
   methods: {
     // @ts-ignore
-    async getMonths() {
+    async addEntry() {
+      if (!this.entry.name || !this.entry.amount) {
+        return;
+      }
+
+      const entry = {
+        detail: this.entry.name,
+        amount: this.entry.amount,
+        month: String(this.entry.month),
+        year: this.entry.year,
+      };
+
       try {
-        const { data } = await MonthDataService.list(this.limit, this.page)
+        await EntryDataService.create(entry)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await this.$router.push({
+              name: "Entry",
+              params: { entry: data.entryCreate.id },
+            });
           })
           .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getMonths() {
+      try {
+        await MonthDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
 
-        this.months = await data;
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.months = data.months;
+          })
+          .catch((error) => console.log(error));
       } catch (error) {
         console.log(error);
       }
@@ -159,31 +200,6 @@ export default {
       }
 
       this.years = year;
-    },
-    // @ts-ignore
-    async addEntry() {
-      try {
-        if (this.entry.amount === null) {
-          alert("Monto no puede estar vacio.");
-          return;
-        }
-
-        const entry = await EntryInterface(this.entry);
-
-        const { data, status } = await EntryDataService.create(entry)
-          .then(async (response) => {
-            return await response;
-          })
-          .catch((error) => console.log(error));
-
-        if (status !== 201) {
-          console.log(data);
-        }
-
-        await this.$router.push({ name: "Entries" });
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
   watch: {

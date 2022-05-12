@@ -30,14 +30,14 @@
           </p>
           <p class="flex flex-col py-3">
             <span class="font-bold">Creado</span>
-            <span>{{ new Date(item.createdAt).toDateString() }}</span>
+            <span>{{ item?.createdAt?._.split('T')[0] }}</span>
           </p>
           <p
             class="flex flex-col py-3"
-            v-if="item.createdAt !== item.updatedAt"
+            v-if="item?.createdAt?._ !== item?.updatedAt?._"
           >
             <span class="font-bold">Modificado</span>
-            <span>{{ new Date(item.updatedAt).toDateString() }}</span>
+            <span>{{ item?.updatedAt?._.split('T')[0] }}</span>
           </p>
         </div>
 
@@ -86,9 +86,9 @@
 <script>
 // @ts-check
 // @ts-ignore
-import ItemDataService from "@/services/ItemDataService.js";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import ItemDataService from "@/graphql/ItemDataService.js";
 
 export default {
   components: {
@@ -118,21 +118,19 @@ export default {
     // @ts-ignore
     async getItem() {
       try {
-        const { data, status } = await ItemDataService.get(
-          this.$route.params.item
-        )
+        await ItemDataService.get(this.$route.params.item)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.item = data.item;
           })
           .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        this.item = await data;
-        this.headerLinks.title = await data.name;
-        this.headerLinks.icon = await data.icon;
       } catch (error) {
         console.log(error);
       }
@@ -140,17 +138,23 @@ export default {
     // @ts-ignore
     async remove() {
       if (window.confirm(`Está a punto de borrar un elemento`)) {
-        const { status } = await ItemDataService.remove(this.$route.params.item)
-          .then(async (response) => {
-            return await response;
-          })
-          .catch((error) => console.log(error));
+        try {
+          await ItemDataService.remove(this.$route.params.item)
+            .then((r) => r.json())
+            .then(async (response) => {
+              const { data, errors } = await response;
 
-        if (status !== 200) {
-          return;
+              if (errors) {
+                console.log(errors[0].message);
+                return;
+              }
+
+              await this.$router.push({ name: "Items" });
+            })
+            .catch((error) => console.log(error));
+        } catch (error) {
+          console.log(error);
         }
-
-        await this.$router.push({ name: "Items" });
       }
     },
   },

@@ -17,7 +17,7 @@
               class="w-8 text-2xl text-center mx-2"
               :class="item.icon ? item.icon : 'fas fa-sitemap'"
             ></i>
-            <span class="text-l">{{ item.name }}</span> <br />
+            <span class="text-l">{{ item.name }}</span>
           </div>
         </router-link>
         <div v-if="count === 0" class="w-full bg-white rounded my-1 p-3">
@@ -50,9 +50,9 @@
 <script>
 // @ts-check
 // @ts-ignore
-import ItemDataService from "@/services/ItemDataService.js";
-// @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
+// @ts-ignore
+import ItemDataService from "@/graphql/ItemDataService.js";
 
 export default {
   components: {
@@ -75,7 +75,7 @@ export default {
     };
   },
   created() {
-    // this.getItems();
+    this.getItems();
   },
   methods: {
     // @ts-ignore
@@ -83,28 +83,27 @@ export default {
       try {
         this.page++;
 
-        const { data, status } = await ItemDataService.list(
-          this.limit,
-          this.page
-        )
+        await ItemDataService.list(this.limit, this.page)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.items = data.items;
+            this.count = data.items.length;
           })
           .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        this.items = data;
-        this.count = data.length;
       } catch (error) {
         console.log(error);
       }
     },
   },
   watch: {
-    // $route: ["getItems"],
+    $route: ["getItems"],
   },
 };
 </script>

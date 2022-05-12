@@ -61,7 +61,7 @@
       <router-link
         v-for="(link, index) in footLinks"
         :key="index"
-        :to="{ name: link.component }"
+        :to="{ name: link.component, params: { item: $route.params.item } }"
         class="w-1/3 text-gray-900 font-normal hover:text-white uppercase mx-auto p-0"
       >
         <div class="flex flex-col">
@@ -78,9 +78,9 @@
 <script>
 // @ts-check
 // @ts-ignore
-import ItemDataService from "@/services/ItemDataService.js";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import ItemDataService from "@/graphql/ItemDataService.js";
 
 export default {
   components: {
@@ -91,7 +91,7 @@ export default {
       item: {
         name: "",
         icon: "",
-        updatedAt: "",
+        isActive: "",
       },
       icons: [
         {
@@ -121,7 +121,7 @@ export default {
       ],
       footLinks: [
         {
-          component: "Items",
+          component: "Item",
           icon: "fas fa-backward",
           title: "Volver",
           url: `/items/${this.$route.params.item}`,
@@ -140,51 +140,52 @@ export default {
     // @ts-ignore
     async getItem() {
       try {
-        const { data, status } = await ItemDataService.get(
-          this.$route.params.item
-        )
+        await ItemDataService.get(this.$route.params.item)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.item = data.item;
           })
           .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        this.item = await data;
       } catch (error) {
         console.log(error);
       }
     },
     // @ts-ignore
     async updateItem() {
+      if (!this.item.name) {
+        return;
+      }
+
+      const item = {
+        name: this.item.name,
+        icon: this.item.icon,
+        isActive: this.item.isActive,
+      };
+
       try {
-        if (this.item.name === null) {
-          alert("Nombre no puede estar vacio.");
-          return;
-        }
-
-        // @ts-ignore
-        this.item.updatedAt = new Date();
-
-        const { data, status } = await ItemDataService.update(
-          this.$route.params.item,
-          this.item
-        )
+        await ItemDataService.update(this.$route.params.item, item)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await this.$router.push({
+              name: "Item",
+              params: { item: data.itemUpdate.id },
+            });
           })
           .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        await this.$router.push({
-          name: "Item",
-          params: { item: this.$route.params.item },
-        });
       } catch (error) {
         console.log(error);
       }

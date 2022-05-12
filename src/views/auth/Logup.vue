@@ -2,7 +2,7 @@
   <div class="w-full min-h-screen bg-yellow-400 font-sans">
     <main class="container mx-auto">
       <section class="flex min-h-screen p-3">
-        <form @submit.prevent="signUpUser" class="m-auto">
+        <form @submit.prevent="addUser" class="m-auto">
           <p class="text-4xl font-bold text-center mb-4">OsBank</p>
 
           <h1 class="text-4xl text-center">Registro</h1>
@@ -77,19 +77,18 @@
           </div>
         </form>
       </section>
-        <pre class="container hidden">{{ $data }}</pre>
+      <pre class="container hidden">{{ $data }}</pre>
     </main>
   </div>
 </template>
 
 <script>
 // @ts-check
-import { mapActions } from "vuex"
-
 // @ts-ignore
-import UserDataService from "@/services/UserDataService.js";
+import UserDataService from "@/graphql/UserDataService.js";
 
 export default {
+  name: "Logup",
   components: {},
   data() {
     return {
@@ -103,69 +102,40 @@ export default {
     };
   },
   methods: {
-    ...mapActions({
-      registerUser: "Auth/registerUser",
-    }),
-    signUpUser() {
-      // @ts-ignore
-      console.log(this.user)
-      // @ts-ignore
-      this.registerUser(this.user);
-    },
+    // @ts-ignore
     async addUser() {
-      // @ts-ignore
-      if (this.user.email === null) {
-        alert("El correo electrónico no puede estar vacío!.");
+      if (
+        !this.user.email ||
+        !this.user.password ||
+        !this.user.password_confirmation ||
+        !this.user.phone
+      ) {
         return;
       }
-
-      // @ts-ignore
-      if (this.user.phone === null) {
-        alert("El teléfono no puede estar vacío!.");
-        return;
-      }
-
-      // @ts-ignore
-      if (this.user.password === null) {
-        alert("El password no puede estar vacío!.");
-        return;
-      }
-
-      // @ts-ignore
-      if (this.user.password_confirmation !== this.user.password) {
-        alert("El password no coincide!.");
-        return;
-      }
-
-      const user = {
-        // @ts-ignore
-        email: this.user.email,
-        // @ts-ignore
-        name: this.user.name,
-        // @ts-ignore
-        password: this.user.password,
-        // @ts-ignore
-        phone: this.user.phone,
-      };
 
       try {
-        // @ts-ignore
-        const { error } = await UserDataService.create(user)
-          .then(async (response) => {
-            return await response.data;
-          })
-          .catch((error) => console.log(error));
-        if (error) {
-          alert(error.message);
-          return;
-        }
+        const user = {
+          email: this.user.email,
+          name: this.user.name,
+          password: this.user.password,
+          phone: this.user.phone,
+        };
 
-        // @ts-ignore
-        await this.$router.push("/login");
-      } catch (err) {
-        console.log(err);
-        alert("Error al registrar el usuario!.");
-        return;
+        await UserDataService.create(user)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await this.$router.push({ name: "Login" });
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        console.error(error);
       }
     },
   },

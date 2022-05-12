@@ -50,11 +50,10 @@
 <script>
 // @ts-check
 // @ts-ignore
-import { mapActions } from "vuex";
-// @ts-ignore
-import UserDataService from "@/services/UserDataService.js";
+import UserDataService from "@/graphql/UserDataService.js";
 
 export default {
+  name: "Login",
   components: {},
   data() {
     return {
@@ -65,59 +64,37 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["auth"]),
+    // @ts-ignore
     async authUser() {
-      // @ts-ignore
-      if (this.user.username === null) {
-        alert("El correo electrónico o teléfono no puede estar vacío!.");
+      if (!this.user.username || !this.user.password) {
         return;
       }
-
-      // @ts-ignore
-      if (this.user.password === null) {
-        alert("El password no puede estar vacío!.");
-        return;
-      }
-
-      const data = {
-        // @ts-ignore
-        username: this.user.username,
-        // @ts-ignore
-        password: this.user.password,
-      };
 
       try {
-        // @ts-ignore
-        const { error, token, user } = await UserDataService.auth(data)
+        await UserDataService.auth(this.user)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response.data;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await localStorage.setItem("token", data.auth.token);
+            await sessionStorage.setItem(
+              "user",
+              JSON.stringify(data.auth.user)
+            );
+
+            await this.$router.push({ name: "Home" });
           })
-          .catch((error) => console.log(error));
-
-        if (error) {
-          alert(error.message);
-          return;
-        }
-
-        // localStorage.setItem("token", token);
-        await this.auth(token);
-        sessionStorage.setItem("user", JSON.stringify(user));
-
-        // @ts-ignore
-        // await this.$store.state.currentUser;
-        // @ts-ignore
-        // await this.$store.state.currentToken;
-
-        // @ts-ignore
-        await this.$router.push("/");
-      } catch (err) {
-        console.log(err);
-        alert("Error al certificar al usuario!.");
-        return;
+          .catch((error) => console.error(error));
+      } catch (error) {
+        console.error(error);
       }
     },
   },
-  computed: {},
 };
 </script>
 

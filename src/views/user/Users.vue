@@ -23,7 +23,7 @@
         </div>
       </section>
     </main>
-
+    <pre class="container">{{ $data }}</pre>
     <footer
       class="sticky bottom-0 w-full bg-yellow-400 border-t border-yellow-500 p-3 flex justify-between align-center"
     >
@@ -80,21 +80,17 @@ export default {
       try {
         this.page++;
 
-        const { error, count, data } = await UserDataService.list(
+        await UserDataService.list(
           this.limit,
           this.page
         )
+          .then(res => res.json())
           .then(async (response) => {
-            return await response.data;
+            console.log("RESPONSE->", response)
+            this.users = response.data;
+            this.count = response.data.count;
           })
           .catch((error) => console.log(error));
-
-        if (error) {
-          console.log(error.message);
-        }
-
-        this.users = data;
-        this.count = count;
       } catch (error) {
         console.log(error);
       }

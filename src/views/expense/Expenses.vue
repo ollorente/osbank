@@ -9,9 +9,28 @@
           :key="index"
           :to="{ name: 'Expense', params: { expense: expense.id } }"
         >
-          <div class="w-full bg-white rounded my-1 p-3">
-            <span class="text-l">{{ expense.name }}</span> <br />
-            <span class="text-xl font-bold">COP ${{ expense.amount }}</span>
+          <div
+            class="w-full bg-white rounded my-1 p-3 flex justify-between align-start"
+            :class="expense.isActive ? 'opacity-100' : 'opacity-30'"
+          >
+            <i
+              class="w-8 text-2xl text-center mx-2"
+              :class="expense.icon ? expense.icon : 'fas fa-sitemap'"
+            ></i>
+            <div
+              class="w-full bg-white rounded px-3"
+              :class="expense.isActive ? 'opacity-100' : 'opacity-30'"
+            >
+              <div class="flex flex-col text-left">
+                <span class="text-l text-gray-400 font-semibold"
+                  >{{ expense.month.name }} {{ expense.year }}</span
+                >
+                <span  class="text-xl font-bold">COP ${{ expense.amount }}</span>
+              </div>
+              <div class="text-l">
+                <span class="">{{ expense.name }}</span>
+              </div>
+            </div>
           </div>
         </router-link>
         <div v-if="count === 0" class="w-full bg-white rounded my-1 p-3">
@@ -45,6 +64,8 @@
 // @ts-check
 // @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
+// @ts-ignore
+import ExpenseDataService from "@/graphql/ExpenseDataService.js";
 
 export default {
   components: {
@@ -54,6 +75,8 @@ export default {
     return {
       expenses: [],
       count: 0,
+      limit: 20,
+      page: 0,
       footLinks: [
         {
           component: "NewExpense",
@@ -65,18 +88,35 @@ export default {
     };
   },
   created() {
-    // this.getExpenses();
+    this.getExpenses();
   },
   methods: {
     // @ts-ignore
     async getExpenses() {
-      // const expenses = await DATA;
-      // this.count = await DATA.length;
-      // this.expenses = DATA.map((e) => Expense(e));
+      try {
+        this.page++;
+
+        await ExpenseDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.expenses = data.expenses;
+            this.count = data.expenses.length;
+          })
+          .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   watch: {
-    // $route: ["getExpenses"],
+    $route: ["getExpenses"],
   },
 };
 </script>

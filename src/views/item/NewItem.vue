@@ -67,11 +67,9 @@
 <script>
 // @ts-check
 // @ts-ignore
-import ItemDataService from "@/services/ItemDataService";
-// @ts-ignore
-import ItemInterface from "@/interfaces/ItemInterface.js";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import ItemDataService from "@/graphql/ItemDataService";
 
 export default {
   components: {
@@ -126,25 +124,27 @@ export default {
   methods: {
     // @ts-ignore
     async addItem() {
+      if (!this.item.name) {
+        return;
+      }
+
       try {
-        if (this.item.name === null) {
-          alert("Nombre no puede estar vacio.");
-          return;
-        }
-
-        const item = await ItemInterface(this.item);
-
-        const { data, status } = await ItemDataService.create(item)
+        await ItemDataService.create(this.item)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await this.$router.push({
+              name: "Item",
+              params: { item: data.itemCreate.id },
+            });
           })
           .catch((error) => console.log(error));
-
-        if (status !== 201) {
-          console.log(data);
-        }
-
-        await this.$router.push({ name: "Items" });
       } catch (error) {
         console.log(error);
       }

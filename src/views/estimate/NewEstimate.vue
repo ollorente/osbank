@@ -18,24 +18,74 @@
             />
           </div>
           <div class="py-2">
-            <label for="icon" class="font-semibold ml-3">Tipo</label>
+            <label for="amount" class="font-semibold ml-3">Cantidad *</label>
+            <input
+              type="number"
+              class="w-full bg-white rounded p-2"
+              id="amount"
+              v-model="estimate.amount"
+              placeholder="Cantidad *"
+              required
+            />
+          </div>
+          <div class="py-2">
+            <label for="item" class="font-semibold ml-3">Ítem</label>
             <select
-              name="icon"
-              v-model="estimate.icon"
-              id="icon"
+              name="item"
+              v-model="estimate.item"
+              id="item"
               class="w-full bg-white rounded p-2"
             >
-              <option value="null" selected>-- Seleccione un tipo --</option>
+              <option value="null" selected>-- Seleccione un ítem --</option>
               <option
-                v-for="(icon, index) in icons"
+                v-for="(item, index) in items"
                 :key="index"
-                :value="icon.icon"
+                :value="item.id"
               >
-                {{ icon.title }}
+                <i
+                  class="w-8 text-2xl text-center mx-2"
+                  :class="item.icon ? item.icon : 'fas fa-sitemap'"
+                ></i>
+                <span class="text-l">{{ item.name }}</span>
               </option>
             </select>
           </div>
-          <button class="w-full bg-gray-900 text-white rounded my-1 p-2">
+          <div class="py-2">
+            <label for="month" class="font-semibold ml-3">Mes</label>
+            <select
+              name="month"
+              v-model="estimate.month"
+              id="month"
+              class="w-full bg-white rounded p-2"
+            >
+              <option value="null" selected>-- Seleccione un mes --</option>
+              <option
+                v-for="(month, index) in months"
+                :key="index"
+                :value="month.order"
+              >
+                {{ month.name }}
+              </option>
+            </select>
+          </div>
+          <div class="py-2">
+            <label for="year" class="font-semibold ml-3">Año</label>
+            <select
+              name="year"
+              v-model="estimate.year"
+              id="year"
+              class="w-full bg-white rounded p-2"
+            >
+              <option value="null" selected>-- Seleccione un año --</option>
+              <option v-for="year in years" :key="year" :value="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-gray-900 text-white rounded my-1 p-2"
+          >
             Agregar
           </button>
         </form>
@@ -67,11 +117,13 @@
 <script>
 // @ts-check
 // @ts-ignore
-import EstimateDataService from "@/services/EstimateDataService";
-// @ts-ignore
-import EstimateInterface from "@/interfaces/EstimateInterface.js";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import EstimateDataService from "@/graphql/EstimateDataService";
+// @ts-ignore
+import ItemDataService from "@/graphql/ItemDataService";
+// @ts-ignore
+import MonthDataService from "@/graphql/MonthDataService";
 
 export default {
   components: {
@@ -81,8 +133,16 @@ export default {
     return {
       estimate: {
         name: null,
-        icon: null,
+        amount: null,
+        item: null,
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear(),
       },
+      items: [],
+      months: [],
+      years: [],
+      limit: 100,
+      page: 1,
       icons: [
         {
           icon: "fas fa-lightbulb",
@@ -123,32 +183,101 @@ export default {
       },
     };
   },
+  created() {
+    this.getItems();
+    this.getMonths()
+    this.getYears()
+  },
   methods: {
     // @ts-ignore
     async addEstimate() {
+      if (!this.estimate.name || !this.estimate.amount || !this.estimate.item) {
+        return;
+      }
+
+      const estimate = {
+        name: this.estimate.name,
+        amount: this.estimate.amount,
+        item: this.estimate.item,
+        month: String(this.estimate.month),
+        year: this.estimate.year,
+      };
+
       try {
-        if (this.estimate.name === null) {
-          alert("Nombre no puede estar vacio.");
-          return;
-        }
-
-        const estimate = await EstimateInterface(this.estimate);
-
-        const { data, status } = await EstimateDataService.create(estimate)
+        await EstimateDataService.create(estimate)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await this.$router.push({
+              name: "Estimate",
+              params: { estimate: data.estimateCreate.id },
+            });
           })
           .catch((error) => console.log(error));
-
-        if (status !== 201) {
-          console.log(data);
-        }
-
-        await this.$router.push({ name: "Estimates" });
       } catch (error) {
         console.log(error);
       }
     },
+    // @ts-ignore
+    async getItems() {
+      try {
+        await ItemDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.items = data.items;
+          })
+          .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getMonths() {
+      try {
+        await MonthDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.months = data.months;
+          })
+          .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getYears() {
+      const currentYear = new Date().getFullYear() - 2;
+
+      let year = [];
+      for (let i = currentYear; i <= currentYear + 9; i++) {
+        year.push(i);
+      }
+
+      this.years = year;
+    },
+  },
+  watch: {
+    $route: ["getItems", "getMonths", "getYears"],
   },
 };
 </script>

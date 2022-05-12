@@ -9,16 +9,34 @@
           :key="index"
           :to="{ name: 'Estimate', params: { estimate: estimate.id } }"
         >
-          <div class="w-full bg-white rounded my-1 p-3">
-            <span class="text-l">{{ estimate.name }}</span> <br />
-            <span class="text-xl font-bold">COP ${{ estimate.amount }}</span>
+          <div
+            class="w-full bg-white rounded my-1 p-3 flex justify-between align-start"
+            :class="estimate.isActive ? 'opacity-100' : 'opacity-30'"
+          >
+            <i
+              class="w-8 text-2xl text-center mx-2"
+              :class="estimate.icon ? estimate.icon : 'fas fa-sitemap'"
+            ></i>
+            <div
+              class="w-full bg-white rounded px-3"
+              :class="estimate.isActive ? 'opacity-100' : 'opacity-30'"
+            >
+              <div class="flex flex-col text-left">
+                <span class="text-l text-gray-400 font-semibold"
+                  >{{ estimate.month.name }} {{ estimate.year }}</span
+                >
+                <span  class="text-xl font-bold">COP ${{ estimate.amount }}</span>
+              </div>
+              <div class="text-l">
+                <span class="">{{ estimate.name }}</span>
+              </div>
+            </div>
           </div>
         </router-link>
         <div v-if="count === 0" class="w-full bg-white rounded my-1 p-3">
-          No hay Presupuesto
+          No hay Ítems
         </div>
-        <div class="text-4xl p-5">{{ hello }}</div>
-        <pre class="container hiddens">{{ $data }}</pre>
+        <pre class="container hidden">{{ $data }}</pre>
       </section>
     </main>
 
@@ -46,8 +64,8 @@
 // @ts-check
 // @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
-
-import gql from "graphql-tag";
+// @ts-ignore
+import EstimateDataService from "@/graphql/EstimateDataService.js";
 
 export default {
   components: {
@@ -57,6 +75,8 @@ export default {
     return {
       estimates: [],
       count: 0,
+      limit: 20,
+      page: 0,
       footLinks: [
         {
           component: "NewEstimate",
@@ -67,27 +87,36 @@ export default {
       ],
     };
   },
-  apollo: {
-    estimates: {
-      query: gql`
-        query getEstimates($options: EstimateOptionsInput) {
-          estimates(options: $options) {
-            id
-            name
-            amount
-            itemId
-            monthId
-            year
-            isActive
-            createdAt
-            updatedAt
-          }
-        }
-      `,
-      variables: {
-        options: { limit: 10, page: 1 },
-      },
+  created() {
+    this.getEstimates();
+  },
+  methods: {
+    // @ts-ignore
+    async getEstimates() {
+      try {
+        this.page++;
+
+        await EstimateDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.estimates = data.estimates;
+            this.count = data.estimates.length;
+          })
+          .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
     },
+  },
+  watch: {
+    $route: ["getEstimates"],
   },
 };
 </script>

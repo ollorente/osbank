@@ -6,27 +6,34 @@
       <section class="">
         <form @submit.prevent="updateEntry">
           <div class="py-2">
-            <label for="amount" class="font-semibold ml-3">Monto *</label>
+            <label for="name" class="font-semibold ml-3">Nombre *</label>
             <input
-              type="number"
+              type="text"
               class="w-full bg-white rounded p-2"
-              id="amount"
-              min="0"
-              v-model="entry.amount"
-              placeholder="Monto *"
+              id="name"
+              v-model="entry.name"
+              placeholder="Nombre *"
               autofocus
               required
             />
           </div>
           <div class="py-2">
-            <label for="detail" class="font-semibold ml-3">Detalle</label>
-            <input
-              type="text"
+            <label for="icon" class="font-semibold ml-3">Tipo</label>
+            <select
+              name="icon"
+              v-model="entry.icon"
+              id="icon"
               class="w-full bg-white rounded p-2"
-              id="detail"
-              v-model="entry.detail"
-              placeholder="Detalle"
-            />
+            >
+              <option value="null" selected>-- Seleccione un tipo --</option>
+              <option
+                v-for="(icon, index) in icons"
+                :key="index"
+                :value="icon.icon"
+              >
+                {{ icon.title }}
+              </option>
+            </select>
           </div>
           <div class="py-2">
             <label for="monthId" class="font-semibold ml-3">Mes</label>
@@ -86,7 +93,7 @@
       <router-link
         v-for="(link, index) in footLinks"
         :key="index"
-        :to="{ name: 'Entry', params: { entry: $route.params.entry } }"
+        :to="{ name: link.component, params: { entry: $route.params.entry } }"
         class="w-1/3 text-gray-900 font-normal hover:text-white uppercase mx-auto p-0"
       >
         <div class="flex flex-col">
@@ -103,13 +110,13 @@
 <script>
 // @ts-check
 // @ts-ignore
-import EntryDataService from "@/services/EntryDataService";
-// @ts-ignore
-import MonthDataService from "@/services/MonthDataService";
-// @ts-ignore
-import EntryInterface from "@/interfaces/EntryInterface";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import EntryDataService from "@/graphql/EntryDataService.js";
+// @ts-ignore
+import ItemsDataService from "@/graphql/ItemsDataService.js";
+// @ts-ignore
+import MonthDataService from "@/graphql/MonthDataService.js";
 
 export default {
   components: {
@@ -118,19 +125,44 @@ export default {
   data() {
     return {
       entry: {
-        amount: "",
-        detail: "",
-        monthId: "",
-        year: "",
+        name: "",
+        icon: "",
         isActive: "",
       },
+      items: [],
       months: [],
       years: [],
-      limit: 20,
+      limit: 100,
       page: 1,
+      icons: [
+        {
+          icon: "fas fa-lightbulb",
+          title: "Energía",
+        },
+        {
+          icon: "fas fa-burn",
+          title: "Gas",
+        },
+        {
+          icon: "fas fa-broadcast-tower",
+          title: "Internet",
+        },
+        {
+          icon: "fas fa-money-bill-wave",
+          title: "Pago",
+        },
+        {
+          icon: "fas fa-medkit",
+          title: "Salud",
+        },
+        {
+          icon: "fas fa-phone",
+          title: "Teléfono",
+        },
+      ],
       footLinks: [
         {
-          component: "Entries",
+          component: "Entry",
           icon: "fas fa-backward",
           title: "Volver",
           url: `/ingresos/${this.$route.params.entry}`,
@@ -138,26 +170,108 @@ export default {
       ],
       headerLinks: {
         icon: "fas fa-sitemap",
-        title: "Editar ingreso",
+        title: "Editar Ingreso",
       },
     };
   },
   created() {
     this.getEntry();
+    this.getItems();
     this.getMonths();
     this.getYears();
   },
   methods: {
     // @ts-ignore
-    async getMonths() {
+    async updateEntry() {
+      if (!this.entry.name) {
+        return;
+      }
+
+      const entry = {
+        name: this.entry.name,
+        icon: this.entry.icon,
+        isActive: this.entry.isActive,
+      };
+
       try {
-        const { data } = await MonthDataService.list(this.limit, this.page)
+        await EntryDataService.update(this.$route.params.entry, entry)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            await this.$router.push({
+              name: "Entry",
+              params: { entry: data.entryUpdate.id },
+            });
           })
           .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getEntry() {
+      try {
+        await EntryDataService.get(this.$route.params.entry)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
 
-        this.months = await data;
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.entry = data.entry;
+          })
+          .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getItems() {
+      try {
+        await ItemDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.items = data.items;
+          })
+          .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // @ts-ignore
+    async getMonths() {
+      try {
+        this.page++;
+
+        await MonthDataService.list(this.limit, this.page)
+          .then((r) => r.json())
+          .then(async (response) => {
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.months = data.months;
+          })
+          .catch((error) => console.log(error));
       } catch (error) {
         console.log(error);
       }
@@ -173,61 +287,9 @@ export default {
 
       this.years = year;
     },
-    // @ts-ignore
-    async getEntry() {
-      try {
-        const { data, status } = await EntryDataService.get(
-          this.$route.params.entry
-        )
-          .then(async (response) => {
-            return await response;
-          })
-          .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        this.entry = await data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // @ts-ignore
-    async updateEntry() {
-      try {
-        if (this.entry.amount === null) {
-          alert("Monto no puede estar vacio.");
-          return;
-        }
-
-        // @ts-ignore
-        this.entry.updatedAt = new Date();
-
-        const { data, status } = await EntryDataService.update(
-          this.$route.params.entry,
-          EntryInterface(this.entry)
-        )
-          .then(async (response) => {
-            return await response;
-          })
-          .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        await this.$router.push({
-          name: "Entry",
-          params: { entry: this.$route.params.entry },
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
   },
   watch: {
-    $route: ["getEntry", "getMonths", "getYears"],
+    $route: ["getEntry", "getItems", "getMonths", "getYears"],
   },
 };
 </script>

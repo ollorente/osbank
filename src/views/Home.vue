@@ -7,7 +7,11 @@
         class="w-72 h-72 bg-white text-gray-900 text-center rounded-full mx-auto p-3 flex"
       >
         <div class="m-auto">
-          <div class="font-bold"><span class="text-2xl">COP</span><br /><span class="text-4xl">${{ user.total }}</span></div>
+          <div class="font-bold">
+            <span class="text-2xl">COP</span><br /><span class="text-4xl"
+              >${{ user.total }}</span
+            >
+          </div>
           <div class="text-xl">Saldo</div>
         </div>
       </div>
@@ -17,7 +21,11 @@
           class="w-36 h-36 bg-white text-gray-900 text-center rounded-full mx-auto p-3 flex"
         >
           <div class="m-auto">
-            <div class="font-bold"><span class="text-xl">COP</span><br /><span class="text-2xl">${{ user.estimate }}</span></div>
+            <div class="font-bold">
+              <span class="text-xl">COP</span><br /><span class="text-2xl"
+                >${{ user.estimate }}</span
+              >
+            </div>
             <div class="text-xl">Presupuesto</div>
           </div>
         </div>
@@ -26,7 +34,11 @@
           class="w-36 h-36 bg-white text-gray-900 text-center rounded-full mx-auto p-3 flex"
         >
           <div class="m-auto">
-            <div class="font-bold"><span class="text-xl">COP</span><br /><span class="text-2xl">${{ user.expense }}</span></div>
+            <div class="font-bold">
+              <span class="text-xl">COP</span><br /><span class="text-2xl"
+                >${{ user.expense }}</span
+              >
+            </div>
             <div class="text-xl">Gastos</div>
           </div>
         </div>
@@ -58,9 +70,9 @@
 <script>
 // @ts-check
 // @ts-ignore
-import UserDataService from "@/services/UserDataService";
-// @ts-ignore
 import TheNavbar from "@/components/AtomicDesign/Organisms/TheNavbar.vue";
+// @ts-ignore
+import UserDataService from "@/graphql/UserDataService";
 
 export default {
   components: {
@@ -98,20 +110,21 @@ export default {
     // @ts-ignore
     async getUser() {
       try {
-        const { data, error } = await UserDataService.get()
-          .then(async (response) => {
-            const info = await response.data;
-            return info;
-          })
-          .catch((error) => console.log(error));
+        // await UserDataService.get(user)
+        // .then((r) => r.json())
+        // .then(async (response) => {
+        //   const { data, errors } = await response;
 
-        if (error) {
-          console.log(error.message);
-        }
+        //   if (errors) {
+        //     console.log(errors[0].message);
+        //     return;
+        //   }
 
-        this.user = data;
+        //   this.user = data.user;
+        // })
+        // .catch((error) => console.error(error));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },

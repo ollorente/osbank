@@ -6,18 +6,17 @@
       <section class="">
         <div class="w-full bg-white rounded mb-3 p-3">
           <p class="flex flex-col py-3">
-            <span class="font-bold">Monto</span>
-            <span class="text-4xl">${{ entry.amount }}</span>
+            <span class="font-bold">Nombre</span>
+            <span>{{ entry.name }}</span>
           </p>
           <p class="flex flex-col py-3">
-            <span class="font-bold">Detalle</span>
-            <span>{{ entry.detail }}</span>
-          </p>
-          <p class="flex flex-col py-3">
-            <span class="font-bold">Mes</span>
-            <span class="flex justify-between align-center"
-              >{{ entry.month.name }} {{ entry.year }}</span
-            >
+            <span class="font-bold">Ícono</span>
+            <span
+              ><i
+                class="text-3xl"
+                :class="entry.icon ? entry.icon : 'fas fa-sentryap'"
+              ></i
+            ></span>
           </p>
           <p class="flex flex-col py-3">
             <span class="font-bold">Activo</span>
@@ -31,14 +30,14 @@
           </p>
           <p class="flex flex-col py-3">
             <span class="font-bold">Creado</span>
-            <span>{{ new Date(entry.createdAt).toDateString() }}</span>
+            <span>{{ entry?.createdAt?._.split('T')[0] }}</span>
           </p>
           <p
             class="flex flex-col py-3"
-            v-if="entry.createdAt !== entry.updatedAt"
+            v-if="entry?.createdAt?._ !== entry?.updatedAt?._"
           >
             <span class="font-bold">Modificado</span>
-            <span>{{ new Date(entry.updatedAt).toDateString() }}</span>
+            <span>{{ entry?.updatedAt?._.split('T')[0] }}</span>
           </p>
         </div>
 
@@ -87,9 +86,9 @@
 <script>
 // @ts-check
 // @ts-ignore
-import EntryDataService from "@/services/EntryDataService";
-// @ts-ignore
 import InternalNavbar from "@/components/AtomicDesign/Organisms/InternalNavbar.vue";
+// @ts-ignore
+import EntryDataService from "@/graphql/EntryDataService.js";
 
 export default {
   components: {
@@ -97,21 +96,7 @@ export default {
   },
   data() {
     return {
-      entry: {
-        id: "",
-        amount: 0,
-        detail: "",
-        month: {
-          name: "",
-          start: 1,
-          end: 30,
-        },
-        year: new Date().getFullYear(),
-        userId: "",
-        isActive: false,
-        createdAt: "",
-        updatedAt: "",
-      },
+      entry: "",
       footLinks: [
         {
           component: "Entries",
@@ -122,7 +107,7 @@ export default {
       ],
       headerLinks: {
         icon: "fas fa-sitemap",
-        title: "Ingreso",
+        title: "Ingresos",
       },
     };
   },
@@ -133,34 +118,19 @@ export default {
     // @ts-ignore
     async getEntry() {
       try {
-        const { data, status } = await EntryDataService.get(
-          this.$route.params.entry
-        )
+        await EntryDataService.get(this.$route.params.entry)
+          .then((r) => r.json())
           .then(async (response) => {
-            return await response;
+            const { data, errors } = await response;
+
+            if (errors) {
+              console.log(errors[0].message);
+              return;
+            }
+
+            this.entry = data.entry;
           })
           .catch((error) => console.log(error));
-
-        if (status !== 200) {
-          console.log(data);
-        }
-
-        this.entry = {
-          id: await data.id,
-          amount: await data.amount,
-          detail: await data.detail,
-          month: {
-            name: await data.month.name,
-            start: await data.month.start,
-            end: await data.month.end,
-          },
-          year: await data.year,
-          userId: await data.userId,
-          isActive: await data.isActive,
-          createdAt: await data.createdAt,
-          updatedAt: await data.updatedAt,
-        };
-        this.headerLinks.title = await data.detail;
       } catch (error) {
         console.log(error);
       }
@@ -168,19 +138,23 @@ export default {
     // @ts-ignore
     async remove() {
       if (window.confirm(`Está a punto de borrar un elemento`)) {
-        const { status } = await EntryDataService.remove(
-          this.$route.params.entry
-        )
-          .then(async (response) => {
-            return await response;
-          })
-          .catch((error) => console.log(error));
+        try {
+          await EntryDataService.remove(this.$route.params.entry)
+            .then((r) => r.json())
+            .then(async (response) => {
+              const { data, errors } = await response;
 
-        if (status !== 200) {
-          return;
+              if (errors) {
+                console.log(errors[0].message);
+                return;
+              }
+
+              await this.$router.push({ name: "Entries" });
+            })
+            .catch((error) => console.log(error));
+        } catch (error) {
+          console.log(error);
         }
-
-        await this.$router.push({ name: "Entries" });
       }
     },
   },
