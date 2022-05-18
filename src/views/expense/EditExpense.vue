@@ -135,6 +135,7 @@ export default {
         year: "",
         isActive: "",
       },
+      items: [],
       months: [],
       years: [],
       limit: 100,
@@ -170,12 +171,12 @@ export default {
           component: "Expense",
           icon: "fas fa-backward",
           title: "Volver",
-          url: `/gastos/${this.$route.params.expense}`,
+          url: `/pagos/${this.$route.params.expense}`,
         },
       ],
       headerLinks: {
         icon: "fas fa-sitemap",
-        title: "Editar Gasto",
+        title: "Editar Pago",
       },
     };
   },

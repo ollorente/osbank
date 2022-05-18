@@ -102,12 +102,12 @@ export default {
           component: "Expenses",
           icon: "fas fa-backward",
           title: "Volver",
-          url: "/gastos",
+          url: "/pagos",
         },
       ],
       headerLinks: {
         icon: "fas fa-sitemap",
-        title: "Gastos",
+        title: "Pagos",
       },
     };
   },

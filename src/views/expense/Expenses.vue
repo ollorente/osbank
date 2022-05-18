@@ -82,7 +82,7 @@ export default {
           component: "NewExpense",
           icon: "fas fa-plus-circle",
           title: "Nuevo",
-          url: "/presupuesto/nuevo",
+          url: "/pagos/nuevo",
         },
       ],
     };
