@@ -14,38 +14,38 @@ const routes = [
     }
   },
   {
-    path: '/gastos',
+    path: '/pagos',
     name: 'Expenses',
     component: () => import('@/views/expense/Expenses.vue'),
     meta: {
-      title: `Gastos ${BASE_URL_TITLE}`,
+      title: `Pagos ${BASE_URL_TITLE}`,
       requiredAuth: true
     }
   },
   {
-    path: '/gastos/nuevo',
+    path: '/pagos/nuevo',
     name: 'NewExpense',
     component: () => import('@/views/expense/NewExpense.vue'),
     meta: {
-      title: `Nuevo gasto ${BASE_URL_TITLE}`,
+      title: `Nuevo pago ${BASE_URL_TITLE}`,
       requiredAuth: true
     }
   },
   {
-    path: '/gastos/:expense',
+    path: '/pagos/:expense',
     name: 'Expense',
     component: () => import('@/views/expense/Expense.vue'),
     meta: {
-      title: `Gasto ${BASE_URL_TITLE}`,
+      title: `Pago ${BASE_URL_TITLE}`,
       requiredAuth: true
     }
   },
   {
-    path: '/gastos/:expense/editar',
+    path: '/pagos/:expense/editar',
     name: 'EditExpense',
     component: () => import('@/views/expense/EditExpense.vue'),
     meta: {
-      title: `Editar gasto ${BASE_URL_TITLE}`,
+      title: `Editar pago ${BASE_URL_TITLE}`,
       requiredAuth: true
     }
   },
@@ -201,7 +201,7 @@ const routes = [
     }
   },
   {
-    path: '/*',
+    path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
     meta: {
