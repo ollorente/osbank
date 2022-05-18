@@ -39,8 +39,8 @@ export default {
         {
           component: "Expenses",
           icon: "fas fa-coins",
-          title: "Gastos",
-          url: "/gastos",
+          title: "Pagos",
+          url: "/pagos",
         },
         {
           component: "Entries",
