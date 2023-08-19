@@ -1,0 +1,237 @@
+{
+  "months": {
+    "00": {
+      "id": "00",
+      "name": "Enero",
+      "slug": "enero",
+      "isActive": true
+    },
+    "01": {
+      "id": "01",
+      "name": "Febrero",
+      "slug": "febrero",
+      "isActive": true
+    },
+    "02": {
+      "id": "02",
+      "name": "Marzo",
+      "slug": "marzo",
+      "isActive": true
+    },
+    "03": {
+      "id": "03",
+      "name": "Abril",
+      "slug": "abril",
+      "isActive": true
+    },
+    "04": {
+      "id": "04",
+      "name": "Mayo",
+      "slug": "Mayo",
+      "isActive": true
+    },
+    "05": {
+      "id": "05",
+      "name": "Junio",
+      "slug": "junio",
+      "isActive": true
+    },
+    "06": {
+      "id": "06",
+      "name": "Julio",
+      "slug": "julio",
+      "isActive": true
+    },
+    "07": {
+      "id": "07",
+      "name": "Agosto",
+      "slug": "agosto",
+      "isActive": true
+    },
+    "08": {
+      "id": "08",
+      "name": "Septiembre",
+      "slug": "septiembre",
+      "isActive": true
+    },
+    "09": {
+      "id": "09",
+      "name": "Octubre",
+      "slug": "octubre",
+      "isActive": true
+    },
+    "10": {
+      "id": "10",
+      "name": "Noviembre",
+      "slug": "noviembre",
+      "isActive": true
+    },
+    "11": {
+      "id": "11",
+      "name": "Diciembre",
+      "slug": "diciembre",
+      "isActive": true
+    }
+  },
+  "users": {
+    "0ee85832-704a-4499-b4bb-8deddd4af080": {
+      "id": "0ee85832-704a-4499-b4bb-8deddd4af080",
+      "phone": "1234567890",
+      "name": "Test",
+      "email": "test@test.com",
+      "password": "789456123",
+      "isActive": true,
+      "isLock": false,
+      "createdAt": "2022-03-21 00:54:19",
+      "updatedAt": "2022-03-21 00:54:19"
+    }
+  },
+  "userEntries": {
+    "0ee85832-704a-4499-b4bb-8deddd4af080": {
+      "f05ed139-a513-4525-8f31-1be826cdd1e5": {
+        "id": "f05ed139-a513-4525-8f31-1be826cdd1e5",
+        "amount": 7894568,
+        "detail": "fyuñhjlijs",
+        "monthId": "04",
+        "year": 2023,
+        "userId": "",
+        "isActive": true,
+        "createdAt": "2022-03-17T01:51:49.320Z",
+        "updatedAt": "2022-03-17T02:15:10.309Z"
+      }
+    }
+  },
+  "userEstimates": {
+    "0ee85832-704a-4499-b4bb-8deddd4af080": {}
+  },
+  "userExpenses": {
+    "0ee85832-704a-4499-b4bb-8deddd4af080": {}
+  },
+  "userItems": {
+    "0ee85832-704a-4499-b4bb-8deddd4af080": {
+      "c276c70f-967d-43ae-9b88-7765ddf40dbc": {
+        "id": "c276c70f-967d-43ae-9b88-7765ddf40dbc",
+        "name": "Administración",
+        "icon": "fas fa-money-bill-wave",
+        "isActive": true,
+        "createdAt": "2022-02-14T07:59:19.330Z",
+        "updatedAt": "2022-02-14T07:59:19.330Z"
+      },
+      "0cf4d6ca-8454-4322-917f-f52292ebedd1": {
+        "id": "0cf4d6ca-8454-4322-917f-f52292ebedd1",
+        "name": "Agua",
+        "icon": "fas fa-burn",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:25.422Z",
+        "updatedAt": "2022-03-14T07:59:25.422Z"
+      },
+      "82884ce6-76bd-462b-981c-75f8466e2bbc": {
+        "id": "82884ce6-76bd-462b-981c-75f8466e2bbc",
+        "name": "AFP",
+        "icon": "fas fa-medkit",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:56:34.627Z",
+        "updatedAt": "2022-03-14T07:56:34.627Z"
+      },
+      "c8c6840c-2c7c-4b0c-a8ec-ede7482ac09c": {
+        "id": "c8c6840c-2c7c-4b0c-a8ec-ede7482ac09c",
+        "name": "Ahorro",
+        "icon": "fas fa-money-bill-wave",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:32.673Z",
+        "updatedAt": "2022-03-14T07:59:32.673Z"
+      },
+      "40aff255-df1a-448d-b1c2-227bede27ccd": {
+        "id": "40aff255-df1a-448d-b1c2-227bede27ccd",
+        "name": "Almuerzo",
+        "icon": "fas fa-money-bill-wave",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:38.661Z",
+        "updatedAt": "2022-03-14T07:59:38.661Z"
+      },
+      "11699068-e176-47d0-8ec1-4b345759e61e": {
+        "id": "11699068-e176-47d0-8ec1-4b345759e61e",
+        "name": "ARL",
+        "icon": "fas fa-medkit",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:06.147Z",
+        "updatedAt": "2022-03-14T07:59:06.147Z"
+      },
+      "54a59b4e-1dd6-4125-9b30-103b9eed64cb": {
+        "id": "54a59b4e-1dd6-4125-9b30-103b9eed64cb",
+        "name": "Arriendo",
+        "icon": "fas fa-money-bill-wave",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:46.343Z",
+        "updatedAt": "2022-03-14T07:59:46.343Z"
+      },
+      "1f8773e8-e2ad-45c9-beff-49a1ebe6fc33": {
+        "id": "1f8773e8-e2ad-45c9-beff-49a1ebe6fc33",
+        "name": "Cable",
+        "icon": "fas fa-broadcast-tower",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:51.912Z",
+        "updatedAt": "2022-03-14T07:59:51.912Z"
+      },
+      "c178eee7-d2ea-4364-a526-87e08246c47b": {
+        "id": "c178eee7-d2ea-4364-a526-87e08246c47b",
+        "name": "Casa",
+        "icon": "fas fa-money-bill-wave",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:59:57.615Z",
+        "updatedAt": "2022-03-14T07:59:57.615Z"
+      },
+      "a60f0700-3794-462f-a509-6bed49daa572": {
+        "id": "a60f0700-3794-462f-a509-6bed49daa572",
+        "name": "Cesantía",
+        "icon": "fas fa-medkit",
+        "isActive": true,
+        "createdAt": "2022-03-14T08:00:02.691Z",
+        "updatedAt": "2022-03-14T08:00:02.691Z"
+      },
+      "013a3030-957d-4e7b-81cd-19e5041ae0d8": {
+        "id": "013a3030-957d-4e7b-81cd-19e5041ae0d8",
+        "name": "Energía",
+        "icon": "fas fa-lightbulb",
+        "isActive": true,
+        "createdAt": "2022-03-14T08:00:15.545Z",
+        "updatedAt": "2022-03-14T08:00:15.545Z"
+      },
+      "3abc8bea-ac93-40d2-9a8f-91ad6484c63b": {
+        "id": "3abc8bea-ac93-40d2-9a8f-91ad6484c63b",
+        "name": "EPS",
+        "icon": "fas fa-medkit",
+        "isActive": true,
+        "createdAt": "2022-03-14T08:00:08.703Z",
+        "updatedAt": "2022-03-14T08:00:08.703Z"
+      },
+      "3653f9c0-dd1e-4478-9b46-20ab2381ed6c": {
+        "id": "3653f9c0-dd1e-4478-9b46-20ab2381ed6c",
+        "name": "Teléfono",
+        "icon": "fas fa-phone",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:58:58.533Z",
+        "updatedAt": "2022-03-14T07:58:58.533Z"
+      },
+      "02cbebf4-ec59-42a4-8f66-5f1bd52c37ea": {
+        "id": "02cbebf4-ec59-42a4-8f66-5f1bd52c37ea",
+        "name": "Transporte",
+        "icon": "fas fa-money-bill-wave",
+        "isActive": true,
+        "createdAt": "2022-03-14T07:58:47.144Z",
+        "updatedAt": "2022-03-14T07:58:47.144Z"
+      }
+    }
+  },
+  "userTotals": {
+    "0ee85832-704a-4499-b4bb-8deddd4af080": {
+      "ec2359cc-2833-4ba0-aa9e-01e5f985d7cd": {
+        "id": "ec2359cc-2833-4ba0-aa9e-01e5f985d7cd",
+        "total": 7894568,
+        "estimate": 0,
+        "expense": 0,
+        "userId": "0ee85832-704a-4499-b4bb-8deddd4af080"
+      }
+    }
+  }
+}
